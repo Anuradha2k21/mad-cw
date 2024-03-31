@@ -1,14 +1,264 @@
 package com.example.mad_cw;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.widget.EditText;
+import android.widget.ImageButton;
+
+import android.app.DatePickerDialog;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 public class UserRegister extends AppCompatActivity {
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_PICK = 2;
+
+    private ImageView ivProfile;
+    private EditText etPassword, etConfirmPassword, etEmail, etName, etTp, etAddress, etCity, etNIC, etDOB;
+    private RadioGroup rgGender;
+    private RadioButton rbGender;
+    private ImageButton btnViewPassword;
+    private Button btnRegister;
+    private String gender;
+    private static final int PERMISSIONS_REQUEST_CODE = 1234;
+    private static final String[] PERMISSIONS = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_register);
+
+        ivProfile = findViewById(R.id.iv_profile);
+        ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImage();
+            }
+        });
+        if (!hasPermissions()) {
+            requestPermissions();
+        }
+        etPassword = findViewById(R.id.et_pword);
+        etConfirmPassword = findViewById(R.id.et_confirm_pword);
+        btnViewPassword = findViewById(R.id.btn_view_password);
+
+        etName = findViewById(R.id.et_name);
+        etAddress = findViewById(R.id.et_address);
+        etCity = findViewById(R.id.et_city);
+        etEmail = findViewById(R.id.et_email);
+        etTp = findViewById(R.id.et_tp);
+        etNIC = findViewById(R.id.et_nic);
+        etPassword = findViewById(R.id.et_pword);
+        etConfirmPassword = findViewById(R.id.et_confirm_pword);
+        etDOB = findViewById(R.id.et_dob);
+        btnRegister = findViewById(R.id.btn_register);
+        rgGender = findViewById(R.id.radioGroupGender);
+
+        etDOB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDOB();
+            }
+        });
+
+        btnViewPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (etPassword.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())) {
+                    btnViewPassword.setImageResource(R.drawable.ic_view_password);
+                    etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    etConfirmPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                } else {
+                    btnViewPassword.setImageResource(R.drawable.ic_hide_password);
+                    etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    etConfirmPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+            }
+        });
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                validate();
+            }
+        });
+    }
+
+    private void validate() {
+        int selectedId = rgGender.getCheckedRadioButtonId();
+
+        if (etName.getText().toString().isEmpty()) {
+            etName.setError("Name is required");
+        }
+        else if (etName.getText().toString().length() < 3 || etName.getText().toString().length() > 25){
+            etName.setError("Invalid Name");
+        }
+        else if (etAddress.getText().toString().isEmpty()) {
+            etAddress.setError("Address is required");
+        }
+        else if (etAddress.getText().toString().length() < 3 || etAddress.getText().toString().length() > 40){
+            etAddress.setError("Invalid Address");
+        }
+        else if (etCity.getText().toString().isEmpty()) {
+            etCity.setError("City is required");
+        }
+        else if (etCity.getText().toString().length() < 3 || etCity.getText().toString().length() > 30) {
+            etCity.setError("Invalid City");
+        }
+        else if (etDOB.getText().toString().isEmpty()) {
+            Toast.makeText(UserRegister.this, "Date of birth is required", Toast.LENGTH_SHORT).show();
+        }
+        else if (etNIC.getText().toString().isEmpty()) {
+            etNIC.setError("NIC is required");
+        }
+        else if (etNIC.getText().toString().length() < 10 || etNIC.getText().toString().length() > 15) {
+            etNIC.setError("Invalid NIC");
+        }
+        else if (etEmail.getText().toString().isEmpty()) {
+            etEmail.setError("Email is required");
+        }
+        else if (selectedId == -1) {
+            Toast.makeText(UserRegister.this, "Please select a gender", Toast.LENGTH_SHORT).show();
+        }
+        else if (etTp.getText().toString().isEmpty()) {
+            etTp.setError("Telephone number is required");
+        }
+        else if (etTp.getText().toString().length() < 9 || etTp.getText().toString().length() > 13) {
+            etTp.setError("Invalid Telephone number");
+        }
+        else if (etPassword.getText().toString().isEmpty()) {
+            etPassword.setError("Password is required");
+        }
+        else if (etPassword.getText().toString().length() < 8 || etTp.getText().toString().length() > 20) {
+            etPassword.setError("Password should be 8-20 characters long");
+        }
+        else if (etConfirmPassword.getText().toString().isEmpty()) {
+            etConfirmPassword.setError("Confirmation Password is required");
+        }
+        else if (!etPassword.getText().toString().equals(etConfirmPassword.getText().toString())) {
+            etConfirmPassword.setError("Passwords do not match");
+        }
+        else {
+            rbGender = (RadioButton) findViewById(selectedId);
+            String gender = rbGender.getText().toString();
+            processRegister();
+        }
+    }
+
+    private void getDOB() {
+        final Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(UserRegister.this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        etDOB.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
+    }
+
+    private void processRegister() {
+
+            Intent intent = new Intent(UserRegister.this, UserLogin.class);
+            startActivity(intent);
+
+    }
+
+    private boolean hasPermissions() {
+        for (String permission : PERMISSIONS) {
+            if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSIONS_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSIONS_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // permissions were granted
+            } else {
+                // permissions were denied
+            }
+        }
+    }
+
+    private void selectImage() {
+        List<String> optionsList = new ArrayList<>(Arrays.asList("Take Photo", "Choose from Gallery"));
+        if (ivProfile.getDrawable() != null) {
+            optionsList.add("Remove Photo");
+        }
+        optionsList.add("Cancel");
+
+        CharSequence[] options = optionsList.toArray(new CharSequence[0]);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(UserRegister.this);
+        builder.setTitle("Add a Profile Picture");
+        builder.setItems(options, (dialog, item) -> {
+            if (options[item].equals("Take Photo")) {
+                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePicture.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
+                }
+            } else if (options[item].equals("Choose from Gallery")) {
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickPhoto, REQUEST_IMAGE_PICK);
+            } else if (options[item].equals("Remove Photo")) {
+                ivProfile.setImageDrawable(null);
+            } else if (options[item].equals("Cancel")) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                ivProfile.setImageBitmap(imageBitmap);
+            } else if (requestCode == REQUEST_IMAGE_PICK) {
+                Uri selectedImage = data.getData();
+                ivProfile.setImageURI(selectedImage);
+            }
+        }
     }
 }
