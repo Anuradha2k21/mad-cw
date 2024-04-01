@@ -81,6 +81,15 @@ public class UserRegister extends AppCompatActivity {
         btnRegister = findViewById(R.id.btn_register);
         rgGender = findViewById(R.id.radioGroupGender);
 
+        rgGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // checkedId is the RadioButton selected
+                rbGender = (RadioButton) findViewById(checkedId);
+                gender = rbGender.getText().toString();
+            }
+        });
+
         etDOB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,7 +120,7 @@ public class UserRegister extends AppCompatActivity {
     }
 
     private void validate() {
-        int selectedId = rgGender.getCheckedRadioButtonId();
+//        int selectedId = rgGender.getCheckedRadioButtonId();
 
         if (etName.getText().toString().isEmpty()) {
             etName.setError("Name is required");
@@ -157,7 +166,7 @@ public class UserRegister extends AppCompatActivity {
             etEmail.setError("Invalid Email");
             etEmail.requestFocus();
         }
-        else if (selectedId == -1) {
+        else if (gender == null) {
             Toast.makeText(UserRegister.this, "Please select a gender", Toast.LENGTH_SHORT).show();
             rgGender.requestFocus();
         }
@@ -186,8 +195,6 @@ public class UserRegister extends AppCompatActivity {
             etConfirmPassword.requestFocus();
         }
         else {
-            rbGender = (RadioButton) findViewById(selectedId);
-            String gender = rbGender.getText().toString();
             processRegister();
         }
     }
