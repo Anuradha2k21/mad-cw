@@ -115,54 +115,75 @@ public class UserRegister extends AppCompatActivity {
 
         if (etName.getText().toString().isEmpty()) {
             etName.setError("Name is required");
+            etName.requestFocus();
         }
         else if (etName.getText().toString().length() < 3 || etName.getText().toString().length() > 25){
             etName.setError("Invalid Name");
+            etName.requestFocus();
         }
         else if (etAddress.getText().toString().isEmpty()) {
             etAddress.setError("Address is required");
+            etAddress.requestFocus();
         }
         else if (etAddress.getText().toString().length() < 3 || etAddress.getText().toString().length() > 40){
             etAddress.setError("Invalid Address");
+            etAddress.requestFocus();
         }
         else if (etCity.getText().toString().isEmpty()) {
             etCity.setError("City is required");
+            etCity.requestFocus();
         }
         else if (etCity.getText().toString().length() < 3 || etCity.getText().toString().length() > 30) {
             etCity.setError("Invalid City");
+            etCity.requestFocus();
         }
         else if (etDOB.getText().toString().isEmpty()) {
             Toast.makeText(UserRegister.this, "Date of birth is required", Toast.LENGTH_SHORT).show();
+            etDOB.requestFocus();
         }
         else if (etNIC.getText().toString().isEmpty()) {
             etNIC.setError("NIC is required");
+            etNIC.requestFocus();
         }
         else if (etNIC.getText().toString().length() < 10 || etNIC.getText().toString().length() > 15) {
             etNIC.setError("Invalid NIC");
+            etNIC.requestFocus();
         }
         else if (etEmail.getText().toString().isEmpty()) {
             etEmail.setError("Email is required");
+            etEmail.requestFocus();
+        }
+        else if (etEmail.getText().toString().length() < 8 || etEmail.getText().toString().length() > 50) {
+            etEmail.setError("Invalid Email");
+            etEmail.requestFocus();
         }
         else if (selectedId == -1) {
             Toast.makeText(UserRegister.this, "Please select a gender", Toast.LENGTH_SHORT).show();
+            rgGender.requestFocus();
         }
         else if (etTp.getText().toString().isEmpty()) {
             etTp.setError("Telephone number is required");
+            etTp.requestFocus();
         }
         else if (etTp.getText().toString().length() < 9 || etTp.getText().toString().length() > 13) {
             etTp.setError("Invalid Telephone number");
+            etTp.requestFocus();
         }
         else if (etPassword.getText().toString().isEmpty()) {
             etPassword.setError("Password is required");
+            etPassword.requestFocus();
         }
         else if (etPassword.getText().toString().length() < 8 || etTp.getText().toString().length() > 20) {
             etPassword.setError("Password should be 8-20 characters long");
+            etPassword.requestFocus();
         }
         else if (etConfirmPassword.getText().toString().isEmpty()) {
             etConfirmPassword.setError("Confirmation Password is required");
+            etConfirmPassword.requestFocus();
         }
         else if (!etPassword.getText().toString().equals(etConfirmPassword.getText().toString())) {
             etConfirmPassword.setError("Passwords do not match");
+            etConfirmPassword.requestFocus();
         }
         else {
             rbGender = (RadioButton) findViewById(selectedId);
