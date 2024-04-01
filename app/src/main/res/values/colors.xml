@@ -2,5 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="x11gray">#BEBEBE</color>
+    <color name="gray">#bdc3c7</color>
+    <color name="american_river">#636e72</color>
+    <color name="mazarine_blue">#273c75</color>
 </resources>
