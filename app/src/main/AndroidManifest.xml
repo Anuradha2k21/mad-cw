@@ -23,13 +23,13 @@
             android:name=".user.UserUpdateAccount"
             android:exported="false" />
         <activity
-            android:name=".user.UserLogin"
+            android:name=".course.CourseRecyclerView"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".course.CourseRecyclerView"
+            android:name=".user.UserLogin"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
