@@ -17,6 +17,12 @@
         android:theme="@style/Theme.MADCW"
         tools:targetApi="31">
         <activity
+            android:name=".user.UserConfirmation"
+            android:exported="false" />
+        <activity
+            android:name=".user.UserUpdate"
+            android:exported="false" />
+        <activity
             android:name=".user.UserRegister"
             android:exported="false" />
         <activity
