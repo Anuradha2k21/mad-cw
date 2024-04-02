@@ -42,6 +42,9 @@ public class CourseModel implements Serializable {
         this.duration = duration;
     }
 
+    public CourseModel() {
+    }
+
     @Override
     public String toString() {
         return "CourseModel{" +
