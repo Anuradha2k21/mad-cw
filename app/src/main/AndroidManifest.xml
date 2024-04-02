@@ -17,13 +17,13 @@
         android:theme="@style/Theme.MADCW"
         tools:targetApi="31">
         <activity
-            android:name=".UserRegister"
+            android:name=".user.UserRegister"
             android:exported="false" />
         <activity
-            android:name=".UserUpdateAccount"
+            android:name=".user.UserUpdateAccount"
             android:exported="false" />
         <activity
-            android:name=".UserLogin"
+            android:name=".user.UserLogin"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
