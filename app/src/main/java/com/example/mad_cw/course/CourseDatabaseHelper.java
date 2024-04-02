@@ -81,7 +81,7 @@ public class CourseDatabaseHelper extends SQLiteOpenHelper {
             if (result == -1) {
                 Toast.makeText(context, "Failed to insert course: " + course.getName(), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(context, "Successfully inserted course: " + course.getName(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Successfully inserted course: " + course.getName(), Toast.LENGTH_SHORT).show();
             }
         }
     }
