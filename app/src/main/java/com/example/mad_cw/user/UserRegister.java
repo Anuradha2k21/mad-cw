@@ -1,4 +1,4 @@
-package com.example.mad_cw;
+package com.example.mad_cw.user;
 
 import android.Manifest;
 import android.content.Intent;
@@ -27,10 +27,11 @@ import android.widget.ImageButton;
 
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import com.example.mad_cw.R;
 
 public class UserRegister extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
