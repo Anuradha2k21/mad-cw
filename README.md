@@ -8,4 +8,4 @@ use usb debugging or wireless debugging if possible instead of using emulator. b
 
 let me know if you got any gradle conflict errors. usually android studio automatically download and installs any new gradle versions.
 
-IMPORTANT: you'd have to edit gmail credentials in UserConfirmation.java file. otherwise whole app some other parts of the app might not run correctly.
+IMPORTANT: you'd have to input gmail credentials in UserConfirmation.java file before running. otherwise the whole app or some parts of the app might not run correctly.
