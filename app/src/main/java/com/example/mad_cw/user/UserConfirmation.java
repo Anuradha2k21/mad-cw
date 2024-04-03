@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mad_cw.R;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Random;
@@ -26,8 +27,10 @@ import javax.mail.internet.MimeMessage;
 
 public class UserConfirmation extends AppCompatActivity {
     private EditText etCodeInput;
-    private int randomCode;
+    private String randomCode;
     private long codeGenerationTime;
+    UserModel userModel;
+    UserDatabaseHelper userDatabaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,26 +38,35 @@ public class UserConfirmation extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user_confirmation);
 
-//        Intent intent = getIntent();
+        Intent intent = getIntent();
+        userModel = (UserModel) intent.getSerializableExtra("user");
+
         etCodeInput = findViewById(R.id.et_code_input);
         Button btnConfirm = findViewById(R.id.btn_confirm);
 
         // Generate a random number between 100000 and 999999 (inclusive)
         Random random = new Random();
-        randomCode = random.nextInt(900000) + 100000;
+        int randomInt = random.nextInt(900000) + 100000;
+        randomCode = String.valueOf(randomInt);
         codeGenerationTime = new Date().getTime();
 
         sendEmail();
 
         btnConfirm.setOnClickListener(v -> {
-            onClickConfirm();
+            try {
+                onClickConfirm();
+            }
+            catch (Exception e){
+                e.printStackTrace();
+                Toast.makeText(this, "There's an error processing your request " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
     private void sendEmail() {
         try {
             String stringSenderEmail = "";
-            String stringReceiverEmail = "";
+            String stringReceiverEmail = userModel.getEmail();
             String stringPasswordSenderEmail = "";
 
             String stringHost = "smtp.gmail.com";
@@ -99,28 +111,29 @@ public class UserConfirmation extends AppCompatActivity {
         }
     }
 
-    private void onClickConfirm() {
-        if(etCodeInput.getText().toString().matches(".*\\D.*")){
-            etCodeInput.setError("Only numbers allowed");
-            etCodeInput.requestFocus();
-        }
-        else {
-            int inputCode = Integer.parseInt(etCodeInput.getText().toString());
-            long currentTime = new Date().getTime();
-            long differenceInMinutes = (currentTime - codeGenerationTime) / (1000 * 60);
+    private void onClickConfirm() throws SQLException {
+        long currentTime = new Date().getTime();
+        long differenceInMinutes = (currentTime - codeGenerationTime) / (1000 * 60);
 
-            if (Integer.toString(inputCode).length() != 6 || inputCode != randomCode) {
-                etCodeInput.setError("Invalid confirmation code");
-                etCodeInput.requestFocus();
-            } else if (inputCode == randomCode && differenceInMinutes > 10) {
-                Toast.makeText(this, "The code has expired. Please request a new code", Toast.LENGTH_SHORT).show();
-            } else if (inputCode == randomCode && differenceInMinutes < 10) {
-                Intent intent1 = new Intent(UserConfirmation.this, UserLogin.class);
-                startActivity(intent1);
+        if (etCodeInput.getText().toString().length() != 6 || !etCodeInput.getText().toString().equals(randomCode) || etCodeInput.getText().toString().matches(".*\\D.*")) {
+            etCodeInput.setError("Invalid confirmation code");
+            etCodeInput.requestFocus();
+        } else if (etCodeInput.getText().toString().equals(randomCode) && differenceInMinutes > 10) {
+            Toast.makeText(this, "The code has expired. Please request a new code", Toast.LENGTH_SHORT).show();
+        } else if (etCodeInput.getText().toString().equals(randomCode) && differenceInMinutes < 10) {
+            Intent intent1 = new Intent(UserConfirmation.this, UserLogin.class);
+            startActivity(intent1);
+
+            userDatabaseHelper = new UserDatabaseHelper(this);
+            boolean result = userDatabaseHelper.addUser(userModel);
+
+            if (result) {
                 Toast.makeText(this, "Your account created. Please sign in", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Unknown error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Failed to create your account", Toast.LENGTH_SHORT).show();
             }
+        } else {
+            Toast.makeText(this, "Unknown error", Toast.LENGTH_SHORT).show();
         }
     }
 }
