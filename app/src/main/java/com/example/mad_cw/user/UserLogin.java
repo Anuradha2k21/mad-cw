@@ -2,6 +2,8 @@ package com.example.mad_cw.user;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +27,8 @@ public class UserLogin extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private Button btnLogin, btnRegister, btnGuest;
     private ImageButton btnViewPassword;
+    private UserDatabaseHelper userDatabaseHelper;
+    private UserModel userModel;
     
 
     @Override
@@ -43,13 +48,7 @@ public class UserLogin extends AppCompatActivity {
         btnViewPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etPassword.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())) {
-                    btnViewPassword.setImageResource(R.drawable.ic_view_password);
-                    etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                } else {
-                    btnViewPassword.setImageResource(R.drawable.ic_hide_password);
-                    etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                }
+                onClickButtonView();
             }
         });
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -69,8 +68,7 @@ public class UserLogin extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(UserLogin.this, CourseRecyclerView.class);
-//                startActivity(intent);
+                onClickLogin();
             }
         });
         adminClick.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +78,69 @@ public class UserLogin extends AppCompatActivity {
 //                startActivity(intent);
             }
         });
+        changeTextColorToDefault();
+    }
 
+    private void changeTextColorToDefault() {
+        etEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                etEmail.setTextColor(getResources().getColor(R.color.black));
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                etEmail.setTextColor(getResources().getColor(R.color.black));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                etEmail.setTextColor(getResources().getColor(R.color.black));
+                etPassword.setTextColor(getResources().getColor(R.color.black));
+            }
+        });
+        etPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                etPassword.setTextColor(getResources().getColor(R.color.black));
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                etPassword.setTextColor(getResources().getColor(R.color.black));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                etPassword.setTextColor(getResources().getColor(R.color.black));
+                etEmail.setTextColor(getResources().getColor(R.color.black));
+            }
+        });
+    }
+
+    private void onClickButtonView() {
+        if (etPassword.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())) {
+            btnViewPassword.setImageResource(R.drawable.ic_view_password);
+            etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+        } else {
+            btnViewPassword.setImageResource(R.drawable.ic_hide_password);
+            etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        }
+    }
+
+    public void onClickLogin(){
+        userDatabaseHelper = new UserDatabaseHelper(UserLogin.this);
+        userModel = userDatabaseHelper.checkLogin(etEmail.getText().toString(), etPassword.getText().toString());
+
+        if(userModel != null) {
+            Intent intent = new Intent(UserLogin.this, CourseRecyclerView.class);
+            intent.putExtra("user", userModel);
+            startActivity(intent);
+        }
+        else {
+            etEmail.setTextColor(getResources().getColor(R.color.red_warning));
+            etPassword.setTextColor(getResources().getColor(R.color.red_warning));
+            Toast.makeText(UserLogin.this, "Email or Password is wrong", Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -216,10 +216,20 @@ public class UserRegister extends AppCompatActivity {
     }
 
     private void processRegister() {
+        UserModel userModel = new UserModel();
+        userModel.setName(etName.getText().toString());
+        userModel.setAddress(etAddress.getText().toString());
+        userModel.setCity(etCity.getText().toString());
+        userModel.setDob(etDOB.getText().toString());
+        userModel.setNic(etNIC.getText().toString());
+        userModel.setEmail(etEmail.getText().toString());
+        userModel.setGender(gender);
+        userModel.setTelephone(etTp.getText().toString());
+        userModel.setPassword(etPassword.getText().toString());
 
-            Intent intent = new Intent(UserRegister.this, UserLogin.class);
+            Intent intent = new Intent(UserRegister.this, UserConfirmation.class);
+            intent.putExtra("user", userModel);
             startActivity(intent);
-
     }
 
     private boolean hasPermissions() {

@@ -5,4 +5,5 @@
     <color name="gray">#bdc3c7</color>
     <color name="american_river">#636e72</color>
     <color name="mazarine_blue">#273c75</color>
+    <color name="red_warning">	#ff0f0f</color>
 </resources>

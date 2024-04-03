@@ -1,5 +1,6 @@
 package com.example.mad_cw.course;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mad_cw.R;
+import com.example.mad_cw.user.UserModel;
 
 import java.util.ArrayList;
 
@@ -19,6 +21,7 @@ public class CourseRecyclerView extends AppCompatActivity {
     RecyclerView recyclerView;
     CourseDatabaseHelper courseDatabaseHelper;
     ArrayList<CourseModel> courseList;
+    UserModel userModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +32,9 @@ public class CourseRecyclerView extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Intent intent = getIntent();
+        userModel = (UserModel) intent.getSerializableExtra("user");
 
         recyclerView = findViewById(R.id.course_recycler_view);
         courseDatabaseHelper = new CourseDatabaseHelper(this);
