@@ -8,6 +8,7 @@ use usb debugging or wireless debugging if possible instead of using emulator. b
 
 let me know if you got any gradle conflict errors. usually android studio automatically download and installs any new gradle versions.
 
+
 # update these two lines at UserConfirmation.java
 
 how → create a google account and add 2FA and a apppassword
@@ -15,3 +16,6 @@ how → create a google account and add 2FA and a apppassword
 then input gmail address and created app password at marked locations
 
 ![image](https://github.com/Anuradha2k21/mad-cw/assets/61109105/15e25842-0dd1-4c26-a09b-62569a985b1b)
+=======
+IMPORTANT: you'd have to edit gmail credentials in UserConfirmation.java file. otherwise whole app some other parts of the app might not run correctly.
+
