@@ -82,4 +82,23 @@ public class UserLogin extends AppCompatActivity {
         });
 
     }
+
+    public void validate() {
+         if (etEmail.getText().toString().isEmpty()) {
+            etEmail.setError("Email is required");
+            etEmail.requestFocus();
+        }
+        else if (etEmail.getText().toString().length() < 8 || etEmail.getText().toString().length() > 50) {
+            etEmail.setError("Invalid Email");
+            etEmail.requestFocus();
+        }
+         else if (etPassword.getText().toString().isEmpty()) {
+             etPassword.setError("Password is required");
+             etPassword.requestFocus();
+         }
+         else if (etPassword.getText().toString().length() < 8 || etPassword.getText().toString().length() > 20) {
+             etPassword.setError("Password should be 8-20 characters long");
+             etPassword.requestFocus();
+         }
+    }
 }

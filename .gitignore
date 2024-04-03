@@ -13,3 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
+app/src/main/java/com/example/mad_cw/user/UserConfirmation.java
