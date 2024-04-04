@@ -183,7 +183,7 @@ public class UserRegister extends AppCompatActivity {
             etPassword.setError("Password is required");
             etPassword.requestFocus();
         }
-        else if (etPassword.getText().toString().length() < 8 || etTp.getText().toString().length() > 20) {
+        else if (etPassword.getText().toString().length() < 8 || etPassword.getText().toString().length() > 20) {
             etPassword.setError("Password should be 8-20 characters long");
             etPassword.requestFocus();
         }
