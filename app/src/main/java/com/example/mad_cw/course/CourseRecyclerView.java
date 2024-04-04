@@ -12,16 +12,19 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mad_cw.DatabaseHelper;
 import com.example.mad_cw.R;
+import com.example.mad_cw.admin.AdminModel;
 import com.example.mad_cw.user.UserModel;
 
 import java.util.ArrayList;
 
 public class CourseRecyclerView extends AppCompatActivity {
     RecyclerView recyclerView;
-    CourseDatabaseHelper courseDatabaseHelper;
+    DatabaseHelper courseDatabaseHelper;
     ArrayList<CourseModel> courseList;
     UserModel userModel;
+    AdminModel adminModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,10 +38,11 @@ public class CourseRecyclerView extends AppCompatActivity {
 
         Intent intent = getIntent();
         userModel = (UserModel) intent.getSerializableExtra("user");
+        adminModel = (AdminModel) intent.getSerializableExtra("admin");
 
         recyclerView = findViewById(R.id.course_recycler_view);
-        courseDatabaseHelper = new CourseDatabaseHelper(this);
-        courseDatabaseHelper.insertDummyData();
+        courseDatabaseHelper = new DatabaseHelper(this);
+        courseDatabaseHelper.addDummyCourses();
         loadCourses();
     }
 
