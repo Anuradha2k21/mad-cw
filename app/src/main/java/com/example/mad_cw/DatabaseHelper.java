@@ -273,7 +273,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void addDummyAdmin() {
-        adminModel = new AdminModel("anuradhasanjaya2024@gmail.com", "12345678");
+        adminModel = new AdminModel("admin@gmail.com", "12345678");
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 

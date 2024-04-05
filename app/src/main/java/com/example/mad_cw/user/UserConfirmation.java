@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mad_cw.DatabaseHelper;
 import com.example.mad_cw.R;
 
 import java.sql.SQLException;
@@ -30,7 +31,7 @@ public class UserConfirmation extends AppCompatActivity {
     private String randomCode;
     private long codeGenerationTime;
     UserModel userModel;
-    UserDatabaseHelper userDatabaseHelper;
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,8 +125,8 @@ public class UserConfirmation extends AppCompatActivity {
             Intent intent1 = new Intent(UserConfirmation.this, UserLogin.class);
             startActivity(intent1);
 
-            userDatabaseHelper = new UserDatabaseHelper(this);
-            boolean result = userDatabaseHelper.addUser(userModel);
+            databaseHelper = new DatabaseHelper(this);
+            boolean result = databaseHelper.addUser(userModel);
 
             if (result) {
                 Toast.makeText(this, "Your account created. Please sign in", Toast.LENGTH_SHORT).show();
