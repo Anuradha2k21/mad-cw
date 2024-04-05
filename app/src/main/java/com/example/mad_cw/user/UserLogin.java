@@ -55,9 +55,7 @@ public class UserLogin extends AppCompatActivity {
 
         // Check if user details exist in SharedPreferences
         if (sharedPreferences.contains("Email") && sharedPreferences.contains("Password")) {
-            etEmail.setText(sharedPreferences.getString("Email", ""));
-            etPassword.setText(sharedPreferences.getString("Password", ""));
-            rememberMe.setChecked(true);
+            automaticLogin();
         }
         btnViewPassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,5 +184,28 @@ public class UserLogin extends AppCompatActivity {
             etPassword.setTextColor(getResources().getColor(R.color.red_warning));
             Toast.makeText(UserLogin.this, "Email or Password is wrong", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void automaticLogin(){
+        databaseHelper = new DatabaseHelper(UserLogin.this);
+        userModel = databaseHelper.checkUserLogin(sharedPreferences.getString("Email", ""), sharedPreferences.getString("Password", ""));
+
+        if(userModel != null) {
+            Intent intent = new Intent(UserLogin.this, CourseRecyclerView.class);
+            intent.putExtra("user", userModel);
+            startActivity(intent);
+        }
+        else {
+            etEmail.setTextColor(getResources().getColor(R.color.red_warning));
+            etPassword.setTextColor(getResources().getColor(R.color.red_warning));
+            Toast.makeText(UserLogin.this, "Please login again", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void logout() {
+        // Remove the credentials from SharedPreferences
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("Email");
+        editor.remove("Password");
+        editor.apply();
     }
 }
