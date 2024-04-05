@@ -201,11 +201,4 @@ public class UserLogin extends AppCompatActivity {
             Toast.makeText(UserLogin.this, "Please login again", Toast.LENGTH_SHORT).show();
         }
     }
-    public void logout() {
-        // Remove the credentials from SharedPreferences
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove("Email");
-        editor.remove("Password");
-        editor.apply();
-    }
 }

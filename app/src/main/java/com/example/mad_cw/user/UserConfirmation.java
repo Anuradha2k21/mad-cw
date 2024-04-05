@@ -99,7 +99,11 @@ public class UserConfirmation extends AppCompatActivity {
                     try {
                         Transport.send(mimeMessage);
                     } catch (MessagingException e) {
-                        Toast.makeText(UserConfirmation.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(UserConfirmation.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                         e.printStackTrace();
                     }
                 }
