@@ -1,6 +1,7 @@
 package com.example.mad_cw.user;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,6 +9,7 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -31,6 +33,8 @@ public class UserLogin extends AppCompatActivity {
     private ImageButton btnViewPassword;
     private DatabaseHelper databaseHelper;
     private UserModel userModel;
+    private CheckBox rememberMe;
+    private SharedPreferences sharedPreferences;
     
 
     @Override
@@ -46,7 +50,15 @@ public class UserLogin extends AppCompatActivity {
         btnRegister = findViewById(R.id.btn_register_redirect);
         btnGuest = findViewById(R.id.btn_guest);
         adminClick = findViewById(R.id.admin_click);
+        rememberMe = findViewById(R.id.checkBox);
+        sharedPreferences = getSharedPreferences("UserLogin", MODE_PRIVATE);
 
+        // Check if user details exist in SharedPreferences
+        if (sharedPreferences.contains("Email") && sharedPreferences.contains("Password")) {
+            etEmail.setText(sharedPreferences.getString("Email", ""));
+            etPassword.setText(sharedPreferences.getString("Password", ""));
+            rememberMe.setChecked(true);
+        }
         btnViewPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,6 +169,14 @@ public class UserLogin extends AppCompatActivity {
         userModel = databaseHelper.checkUserLogin(etEmail.getText().toString(), etPassword.getText().toString());
 
         if(userModel != null) {
+            //  only runs if remember me is checked
+            if (rememberMe.isChecked()) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("Email", etEmail.getText().toString());
+                editor.putString("Password", etPassword.getText().toString());
+                editor.apply();
+            }
+            //  runs anyway
             Intent intent = new Intent(UserLogin.this, CourseRecyclerView.class);
             intent.putExtra("user", userModel);
             startActivity(intent);
