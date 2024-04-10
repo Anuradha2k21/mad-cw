@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mad_cw.DatabaseHelper;
 import com.example.mad_cw.R;
 
 import java.sql.SQLException;
@@ -30,7 +31,7 @@ public class UserConfirmation extends AppCompatActivity {
     private String randomCode;
     private long codeGenerationTime;
     UserModel userModel;
-    UserDatabaseHelper userDatabaseHelper;
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +99,11 @@ public class UserConfirmation extends AppCompatActivity {
                     try {
                         Transport.send(mimeMessage);
                     } catch (MessagingException e) {
-                        Toast.makeText(UserConfirmation.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(UserConfirmation.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                         e.printStackTrace();
                     }
                 }
@@ -121,13 +126,15 @@ public class UserConfirmation extends AppCompatActivity {
         } else if (etCodeInput.getText().toString().equals(randomCode) && differenceInMinutes > 10) {
             Toast.makeText(this, "The code has expired. Please request a new code", Toast.LENGTH_SHORT).show();
         } else if (etCodeInput.getText().toString().equals(randomCode) && differenceInMinutes < 10) {
-            Intent intent1 = new Intent(UserConfirmation.this, UserLogin.class);
-            startActivity(intent1);
 
-            userDatabaseHelper = new UserDatabaseHelper(this);
-            boolean result = userDatabaseHelper.addUser(userModel);
+
+            databaseHelper = new DatabaseHelper(this);
+            boolean result = databaseHelper.addUser(userModel);
 
             if (result) {
+                Intent intent1 = new Intent(UserConfirmation.this, UserLogin.class);
+                startActivity(intent1);
+
                 Toast.makeText(this, "Your account created. Please sign in", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Failed to create your account", Toast.LENGTH_SHORT).show();
