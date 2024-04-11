@@ -98,10 +98,19 @@ public class UserConfirmation extends AppCompatActivity {
                 public void run() {
                     try {
                         Transport.send(mimeMessage);
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(UserConfirmation.this,
+                                        "Confirmation code sent to your email",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
                     } catch (MessagingException e) {
                         runOnUiThread(new Runnable() {
                             public void run() {
-                                Toast.makeText(UserConfirmation.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UserConfirmation.this,
+                                        "There's an error processing your request " + e.getMessage(),
+                                        Toast.LENGTH_SHORT).show();
                             }
                         });
                         e.printStackTrace();
