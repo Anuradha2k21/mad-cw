@@ -60,6 +60,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String USER_COLUMN_CITY = "city";
     private static final String USER_COLUMN_NIC = "nic";
     private static final String USER_COLUMN_DOB = "dob";
+    private static final String USER_COLUMN_IMAGE = "image";
     private ArrayList<UserModel> userList;
     private UserModel userModel;
     public DatabaseHelper(@Nullable Context context) {
@@ -105,7 +106,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 USER_COLUMN_ADDRESS + " TEXT, " +
                 USER_COLUMN_CITY + " TEXT, " +
                 USER_COLUMN_NIC + " TEXT, " +
-                USER_COLUMN_DOB + " TEXT);";
+                USER_COLUMN_DOB + " TEXT, " +
+                USER_COLUMN_IMAGE + " BLOB);";
         db.execSQL(userQuery);
     }
     @Override
@@ -128,6 +130,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(USER_COLUMN_CITY, userModel.getCity());
         cv.put(USER_COLUMN_NIC, userModel.getNic());
         cv.put(USER_COLUMN_DOB, userModel.getDob());
+        cv.put(USER_COLUMN_IMAGE, userModel.getImageBytes());
 
         long insert = db.insertOrThrow(USER_TABLE_NAME, null, cv);
         return insert == -1 ? false : true;
@@ -145,6 +148,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(USER_COLUMN_CITY, userModel.getCity());
         cv.put(USER_COLUMN_NIC, userModel.getNic());
         cv.put(USER_COLUMN_DOB, userModel.getDob());
+        cv.put(USER_COLUMN_IMAGE, userModel.getImageBytes());
 
         String whereClause = "_id=?";
         String[] whereArgs = new String[] {String.valueOf(userModel.getId())};
@@ -179,8 +183,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String city = cursor.getString(7);
                 String nic = cursor.getString(8);
                 String dob = cursor.getString(9);
+                byte[] imageBytes = cursor.getBlob(10);
 
-                userModel = new UserModel(userID, userName, email, password, telephone, gender, address, city, nic, dob);
+                userModel = new UserModel(userID, userName, email, password, telephone, gender, address, city, nic, dob, imageBytes);
                 userList.add(userModel);
             }
         }
@@ -208,8 +213,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String city = cursor.getString(7);
             String nic = cursor.getString(8);
             String dob = cursor.getString(9);
+            byte[] imageBytes = cursor.getBlob(10);
 
-            userModel = new UserModel(userID, userName, email, password, telephone, gender, address, city, nic, dob);
+            userModel = new UserModel(userID, userName, email, password, telephone, gender, address, city, nic, dob, imageBytes);
         }
         cursor.close();
         db.close();

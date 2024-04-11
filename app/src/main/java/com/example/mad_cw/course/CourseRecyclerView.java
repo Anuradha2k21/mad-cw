@@ -53,7 +53,7 @@ public class CourseRecyclerView extends AppCompatActivity {
 
         Intent intent = getIntent();
         userModel = (UserModel) intent.getSerializableExtra("user");
-        adminModel = (AdminModel) intent.getSerializableExtra("admin");
+//        adminModel = (AdminModel) intent.getSerializableExtra("admin");
 
         recyclerView = findViewById(R.id.course_recycler_view);
         courseDatabaseHelper = new DatabaseHelper(this);
