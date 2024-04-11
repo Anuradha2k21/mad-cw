@@ -55,6 +55,7 @@ public class UserUpdate extends AppCompatActivity {
     private UserModel userModel;
     private DatabaseHelper databaseHelper;
     private byte[] imageBytes;
+    private static final int COMPRESS_QUALITY = 70;
     private static final int PERMISSIONS_REQUEST_CODE = 1234;
     private static final String[] PERMISSIONS = {
             Manifest.permission.CAMERA,
@@ -163,19 +164,36 @@ public class UserUpdate extends AppCompatActivity {
             ivProfile.setImageBitmap(bitmap);
         }
     }
-    private void convertImage() {
+    private boolean convertAndCompressImage() {
 //        Convert ImageView to Bitmap
         Bitmap bitmap = ((BitmapDrawable) ivProfile.getDrawable()).getBitmap();
 
-//        Convert Bitmap to byte array
+// Convert bitmap to byte array
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
-        imageBytes = bos.toByteArray();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, COMPRESS_QUALITY, bos);
+        byte[] bitmapData = bos.toByteArray();
+
+// Check the size of the byte array
+        int imageSizeKB = bitmapData.length / 1024; // Size in KB
+
+// Set a limit for the image size (for example, 1024 KB = 1 MB)
+        int limitKB = 500;
+
+// If the image size exceeds the limit, show a warning message
+        if (imageSizeKB > limitKB) {
+            return false;
+        } else {
+            imageBytes = bitmapData;
+            return true;
+        }
     }
 
     private void validate() {
         if(ivProfile.getDrawable() != null) {
-            convertImage();
+            if(!convertAndCompressImage()) {
+                Toast.makeText(this, "Image is too large. Select an image smaller than 500 KB", Toast.LENGTH_LONG).show();
+                return;
+            }
         }
 
         if (etName.getText().toString().isEmpty()) {
@@ -356,6 +374,7 @@ public class UserUpdate extends AppCompatActivity {
                 startActivityForResult(pickPhoto, REQUEST_IMAGE_PICK);
             } else if (options[item].equals("Remove Photo")) {
                 ivProfile.setImageDrawable(null);
+                imageBytes = null;
             } else if (options[item].equals("Cancel")) {
                 dialog.dismiss();
             }
