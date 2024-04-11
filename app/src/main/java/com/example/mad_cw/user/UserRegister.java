@@ -15,10 +15,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -80,7 +82,7 @@ public class UserRegister extends AppCompatActivity {
         etConfirmPassword = findViewById(R.id.et_confirm_pword);
         etDOB = findViewById(R.id.et_dob);
         btnRegister = findViewById(R.id.btn_register);
-        rgGender = findViewById(R.id.radioGroupGender);
+        rgGender = findViewById(R.id.radio_group_gender);
 
         rgGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -209,7 +211,11 @@ public class UserRegister extends AppCompatActivity {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        etDOB.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        Calendar selectedDate = Calendar.getInstance();
+                        selectedDate.set(year, monthOfYear, dayOfMonth);
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                        String formattedDate = sdf.format(selectedDate.getTime());
+                        etDOB.setText(formattedDate);
                     }
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();

@@ -8,4 +8,7 @@
     <color name="red_warning">	#ff0f0f</color>
 
     <color name="button_pressed_color">#496989</color>
+
+    <color name="forgot_password_pressed_color">#023e8a</color>
+    <color name="forgot_password_default_color">#0096c7</color>
 </resources>

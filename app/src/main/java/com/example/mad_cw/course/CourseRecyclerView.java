@@ -26,6 +26,7 @@ import com.example.mad_cw.admin.AdminModel;
 import com.example.mad_cw.user.UserLogin;
 import com.example.mad_cw.user.UserModel;
 import com.example.mad_cw.user.UserRegister;
+import com.example.mad_cw.user.UserUpdate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,8 +92,14 @@ public class CourseRecyclerView extends AppCompatActivity {
 
         popupMenu.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
-            if (id == R.id.account) {
-                // Handle Account option
+            if (id == R.id.edit_account) {
+                Intent intent = new Intent(getApplicationContext(), UserUpdate.class);
+                intent.putExtra("user", userModel);
+                startActivity(intent);
+
+                return true;
+            }
+            else if (id == R.id.view_registered_courses) {
                 return true;
             }
             else if (id == R.id.sign_out) {

@@ -13,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -35,6 +36,7 @@ public class UserLogin extends AppCompatActivity {
     private UserModel userModel;
     private CheckBox rememberMe;
     private SharedPreferences sharedPreferences;
+    private TextView tvForgotPassword;
     
 
     @Override
@@ -51,6 +53,7 @@ public class UserLogin extends AppCompatActivity {
         btnGuest = findViewById(R.id.btn_guest);
         adminClick = findViewById(R.id.admin_click);
         rememberMe = findViewById(R.id.checkBox);
+        tvForgotPassword = findViewById(R.id.tv_forgot_pword);
         sharedPreferences = getSharedPreferences("UserLogin", MODE_PRIVATE);
 
         // Check if user details exist in SharedPreferences
@@ -88,6 +91,12 @@ public class UserLogin extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(UserLogin.this, AdminLogin.class);
                 startActivity(intent);
+            }
+        });
+        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
         changeTextColorToDefault();

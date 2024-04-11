@@ -2,6 +2,7 @@ package com.example.mad_cw;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -75,6 +76,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ADMIN_COLUMN_PASSWORD + " TEXT);";
         db.execSQL(adminQuery);
 
+        Intent intent = new Intent();
+        userModel = (UserModel) intent.getSerializableExtra("user");
+
         //  create course table
         String courseQuery = "CREATE TABLE " + COURSE_TABLE_NAME +
                 " (" + COURSE_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -127,6 +131,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long insert = db.insertOrThrow(USER_TABLE_NAME, null, cv);
         return insert == -1 ? false : true;
+    }
+    public UserModel updateUser(UserModel userModel) throws SQLException {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(USER_COLUMN_NAME, userModel.getName());
+        cv.put(USER_COLUMN_EMAIL, userModel.getEmail());
+        cv.put(USER_COLUMN_PASSWORD, userModel.getPassword());
+        cv.put(USER_COLUMN_TELEPHONE, userModel.getTelephone());
+        cv.put(USER_COLUMN_GENDER, userModel.getGender());
+        cv.put(USER_COLUMN_ADDRESS, userModel.getAddress());
+        cv.put(USER_COLUMN_CITY, userModel.getCity());
+        cv.put(USER_COLUMN_NIC, userModel.getNic());
+        cv.put(USER_COLUMN_DOB, userModel.getDob());
+
+        String whereClause = "_id=?";
+        String[] whereArgs = new String[] {String.valueOf(userModel.getId())};
+
+        int count = db.update("user_table", cv, whereClause, whereArgs);
+        if (count > 0) {
+            return userModel;
+        } else {
+            return null;
+        }
     }
 
     ArrayList<UserModel> getAllUsers() {
