@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,6 +48,7 @@ public class UserRegister extends AppCompatActivity {
     private ImageButton btnViewPassword;
     private Button btnRegister;
     private String gender;
+    private byte[] imageBytes;
     private static final int PERMISSIONS_REQUEST_CODE = 1234;
     private static final String[] PERMISSIONS = {
             Manifest.permission.CAMERA,
@@ -121,9 +124,20 @@ public class UserRegister extends AppCompatActivity {
             }
         });
     }
+    private void convertImage() {
+//        Convert ImageView to Bitmap
+        Bitmap bitmap = ((BitmapDrawable) ivProfile.getDrawable()).getBitmap();
+
+//        Convert Bitmap to byte array
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+        imageBytes = bos.toByteArray();
+    }
 
     private void validate() {
-//        int selectedId = rgGender.getCheckedRadioButtonId();
+        if(ivProfile.getDrawable() != null) {
+            convertImage();
+        }
 
         if (etName.getText().toString().isEmpty()) {
             etName.setError("Name is required");
@@ -232,6 +246,7 @@ public class UserRegister extends AppCompatActivity {
         userModel.setGender(gender);
         userModel.setTelephone(etTp.getText().toString());
         userModel.setPassword(etPassword.getText().toString());
+        userModel.setImageBytes(imageBytes);
 
             Intent intent = new Intent(UserRegister.this, UserConfirmation.class);
             intent.putExtra("user", userModel);

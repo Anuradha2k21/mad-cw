@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import java.io.ByteArrayOutputStream;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,6 +54,7 @@ public class UserUpdate extends AppCompatActivity {
     private String gender;
     private UserModel userModel;
     private DatabaseHelper databaseHelper;
+    private byte[] imageBytes;
     private static final int PERMISSIONS_REQUEST_CODE = 1234;
     private static final String[] PERMISSIONS = {
             Manifest.permission.CAMERA,
@@ -152,9 +156,28 @@ public class UserUpdate extends AppCompatActivity {
         else if (userModel.getGender().equals("Other")) {
             rgGender.check(R.id.rb_other);
         }
+
+        imageBytes = userModel.getImageBytes();
+        if (imageBytes != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+            ivProfile.setImageBitmap(bitmap);
+        }
+    }
+    private void convertImage() {
+//        Convert ImageView to Bitmap
+        Bitmap bitmap = ((BitmapDrawable) ivProfile.getDrawable()).getBitmap();
+
+//        Convert Bitmap to byte array
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+        imageBytes = bos.toByteArray();
     }
 
     private void validate() {
+        if(ivProfile.getDrawable() != null) {
+            convertImage();
+        }
+
         if (etName.getText().toString().isEmpty()) {
             etName.setError("Name is required");
             etName.requestFocus();
@@ -261,12 +284,14 @@ public class UserUpdate extends AppCompatActivity {
         userModel.setGender(gender);
         userModel.setTelephone(etTp.getText().toString());
         userModel.setPassword(etPassword.getText().toString());
+        userModel.setImageBytes(imageBytes);
 
         databaseHelper = new DatabaseHelper(this);
         UserModel updatedModel;
         try {
             updatedModel = databaseHelper.updateUser(userModel);
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             throw new RuntimeException(e);
         }
