@@ -28,7 +28,9 @@
                 android:layout_gravity="right"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="5dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true">
 
                 <TextView
                     android:id="@+id/textView"
@@ -117,12 +119,14 @@
                     app:layout_constraintTop_toBottomOf="@+id/txt_pword" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/tv_forgot_pword"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="Forgot Password?"
-                    android:textColor="#5356FF"
+                    android:textColor="@color/forgot_password_text_color"
+                    android:clickable="true"
+                    android:focusable="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/checkBox" />
@@ -139,12 +143,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
                     android:backgroundTint="#BE7B72"
                     android:text="Log In"
                     android:textSize="30dp"
                     android:textStyle="bold"
-                    app:cardCornerRadius="20dp" />
+                    app:cardCornerRadius="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/btn_register_redirect"

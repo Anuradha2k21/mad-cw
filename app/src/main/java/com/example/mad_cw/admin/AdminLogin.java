@@ -96,9 +96,11 @@ public class AdminLogin extends AppCompatActivity {
         adminModel = databaseHelper.checkAdminLogin(etEmail.getText().toString().trim(), etPassword.getText().toString());
 
         if(adminModel != null) {
-            Intent intent = new Intent(AdminLogin.this, CourseRecyclerView.class);      //  change the destination activity
-            intent.putExtra("admin", adminModel);
-            startActivity(intent);
+            //  redirect to admin panel
+//            Intent intent = new Intent(AdminLogin.this, AdminPanel.class);
+//            intent.putExtra("admin", adminModel);
+//            startActivity(intent);
+            Toast.makeText(this, "where admin panel - HANSANI?", Toast.LENGTH_LONG).show();
         }
         else {
             etEmail.setTextColor(getResources().getColor(R.color.red_warning));
