@@ -11,7 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="#31363F"
         app:layout_constraintBottom_toTopOf="@+id/course_recycler_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,14 +22,21 @@
             android:id="@+id/back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_media_previous" />
+            android:src="@drawable/ic_back"
+            app:tint="@color/black"
+            android:background="@drawable/button_selector"
+            android:layout_gravity="start"
+            android:layout_marginLeft="10dp"/>
 
         <ImageButton
             android:id="@+id/options_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:src="@android:drawable/ic_menu_more" />
+            android:src="@drawable/ic_menu"
+            app:tint="@color/black"
+            android:background="@drawable/button_selector"
+            android:layout_marginRight="10dp" />
 
     </androidx.appcompat.widget.Toolbar>
 

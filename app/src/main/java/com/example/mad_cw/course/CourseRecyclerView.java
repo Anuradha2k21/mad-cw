@@ -3,11 +3,15 @@ package com.example.mad_cw.course;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
@@ -21,8 +25,11 @@ import com.example.mad_cw.R;
 import com.example.mad_cw.admin.AdminModel;
 import com.example.mad_cw.user.UserLogin;
 import com.example.mad_cw.user.UserModel;
+import com.example.mad_cw.user.UserRegister;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CourseRecyclerView extends AppCompatActivity {
     RecyclerView recyclerView;
@@ -53,6 +60,7 @@ public class CourseRecyclerView extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         backButton = findViewById(R.id.back_button);
         optionsButton = findViewById(R.id.options_button);
@@ -69,6 +77,25 @@ public class CourseRecyclerView extends AppCompatActivity {
         optionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onClickOptionsButton();
+
+            }
+        });
+    }
+
+    private void onClickOptionsButton() {
+        View view = findViewById(R.id.options_button); // The view to which the menu is to be anchored
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        MenuInflater inflater = popupMenu.getMenuInflater();
+        inflater.inflate(R.menu.options_menu, popupMenu.getMenu()); // Inflate the menu resource (R.menu.options_menu)
+
+        popupMenu.setOnMenuItemClickListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.account) {
+                // Handle Account option
+                return true;
+            }
+            else if (id == R.id.sign_out) {
                 SharedPreferences sharedPreferences = getSharedPreferences("UserLogin", MODE_PRIVATE);
                 if (sharedPreferences.contains("Email") && sharedPreferences.contains("Password")) {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -81,8 +108,18 @@ public class CourseRecyclerView extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);    //  clear all activities on top of UserLogin activity
                 startActivity(intent);
                 Toast.makeText(CourseRecyclerView.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+            else if (id == R.id.about) {
+                // Handle About option
+                return true;
+            }
+            else {
+                return false;
             }
         });
+        popupMenu.show();
     }
 
     private void loadCourses() {
