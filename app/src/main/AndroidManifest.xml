@@ -30,9 +30,6 @@
             android:name=".user.UserConfirmation"
             android:exported="false" />
         <activity
-            android:name=".user.UserUpdateAccount"
-            android:exported="false" />
-        <activity
             android:name=".course.CourseRecyclerView"
             android:exported="false" />
         <activity
