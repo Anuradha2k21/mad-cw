@@ -30,6 +30,17 @@ public class UserModel implements Serializable {
         this.imageBytes = imageBytes;
     }
 
+    public UserModel(String name, String email, String password, String telephone, String gender, String address, String city, String nic, String dob) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.telephone = telephone;
+        this.gender = gender;
+        this.address = address;
+        this.city = city;
+        this.nic = nic;
+        this.dob = dob;
+    }
 
     public UserModel(String name, String email, String password, String telephone, String gender, String address, String city, String nic, String dob, byte[] imageBytes) {
         this.name = name;
