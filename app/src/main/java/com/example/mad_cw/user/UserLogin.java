@@ -91,6 +91,7 @@ public class UserLogin extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(UserLogin.this, AdminLogin.class);
                 startActivity(intent);
+
             }
         });
         tvForgotPassword.setOnClickListener(new View.OnClickListener() {
