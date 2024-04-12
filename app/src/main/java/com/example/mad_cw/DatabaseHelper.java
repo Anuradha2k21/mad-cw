@@ -2,6 +2,7 @@ package com.example.mad_cw;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -59,6 +60,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String USER_COLUMN_CITY = "city";
     private static final String USER_COLUMN_NIC = "nic";
     private static final String USER_COLUMN_DOB = "dob";
+
+    private static final String USER_COLUMN_IMAGE = "image";
     private ArrayList<UserModel> userList;
     private UserModel userModel;
     public DatabaseHelper(@Nullable Context context) {
@@ -74,6 +77,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ADMIN_COLUMN_EMAIL + " TEXT, " +
                 ADMIN_COLUMN_PASSWORD + " TEXT);";
         db.execSQL(adminQuery);
+
+
+        Intent intent = new Intent();
+        userModel = (UserModel) intent.getSerializableExtra("user");
+
 
         //  create course table
         String courseQuery = "CREATE TABLE " + COURSE_TABLE_NAME +
@@ -101,8 +109,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 USER_COLUMN_ADDRESS + " TEXT, " +
                 USER_COLUMN_CITY + " TEXT, " +
                 USER_COLUMN_NIC + " TEXT, " +
-                USER_COLUMN_DOB + " TEXT);";
-        db.execSQL(userQuery);
+
+                USER_COLUMN_DOB + " TEXT, " +
+                USER_COLUMN_IMAGE + " BLOB);";
+
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -125,9 +135,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(USER_COLUMN_NIC, userModel.getNic());
         cv.put(USER_COLUMN_DOB, userModel.getDob());
 
+        cv.put(USER_COLUMN_IMAGE, userModel.getImageBytes());
+
+
         long insert = db.insertOrThrow(USER_TABLE_NAME, null, cv);
         return insert == -1 ? false : true;
     }
+
+    public UserModel updateUser(UserModel userModel) throws SQLException {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(USER_COLUMN_NAME, userModel.getName());
+        cv.put(USER_COLUMN_EMAIL, userModel.getEmail());
+        cv.put(USER_COLUMN_PASSWORD, userModel.getPassword());
+        cv.put(USER_COLUMN_TELEPHONE, userModel.getTelephone());
+        cv.put(USER_COLUMN_GENDER, userModel.getGender());
+        cv.put(USER_COLUMN_ADDRESS, userModel.getAddress());
+        cv.put(USER_COLUMN_CITY, userModel.getCity());
+        cv.put(USER_COLUMN_NIC, userModel.getNic());
+        cv.put(USER_COLUMN_DOB, userModel.getDob());
+        cv.put(USER_COLUMN_IMAGE, userModel.getImageBytes());
+
+        String whereClause = "_id=?";
+        String[] whereArgs = new String[] {String.valueOf(userModel.getId())};
+
+        int count = db.update("user_table", cv, whereClause, whereArgs);
+        if (count > 0) {
+            return userModel;
+        } else {
+            return null;
+        }
+    }
+
 
     ArrayList<UserModel> getAllUsers() {
         userList = new ArrayList<>();
@@ -152,7 +192,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String nic = cursor.getString(8);
                 String dob = cursor.getString(9);
 
-                userModel = new UserModel(userID, userName, email, password, telephone, gender, address, city, nic, dob);
+                byte[] imageBytes = cursor.getBlob(10);
+
+                userModel = new UserModel(userID, userName, email, password, telephone, gender, address, city, nic, dob, imageBytes);
+
                 userList.add(userModel);
             }
         }
@@ -181,7 +224,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String nic = cursor.getString(8);
             String dob = cursor.getString(9);
 
-            userModel = new UserModel(userID, userName, email, password, telephone, gender, address, city, nic, dob);
+            byte[] imageBytes = cursor.getBlob(10);
+
+            userModel = new UserModel(userID, userName, email, password, telephone, gender, address, city, nic, dob, imageBytes);
+
         }
         cursor.close();
         db.close();
@@ -273,7 +319,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void addDummyAdmin() {
-        adminModel = new AdminModel("anuradhasanjaya2024@gmail.com", "12345678");
+
+        adminModel = new AdminModel("admin@gmail.com", "12345678");
+
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 

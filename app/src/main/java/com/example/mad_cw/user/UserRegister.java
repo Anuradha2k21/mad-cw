@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,10 +16,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -44,6 +48,8 @@ public class UserRegister extends AppCompatActivity {
     private ImageButton btnViewPassword;
     private Button btnRegister;
     private String gender;
+    private byte[] imageBytes;
+    private static final int COMPRESS_QUALITY = 70;
     private static final int PERMISSIONS_REQUEST_CODE = 1234;
     private static final String[] PERMISSIONS = {
             Manifest.permission.CAMERA,
@@ -80,7 +86,7 @@ public class UserRegister extends AppCompatActivity {
         etConfirmPassword = findViewById(R.id.et_confirm_pword);
         etDOB = findViewById(R.id.et_dob);
         btnRegister = findViewById(R.id.btn_register);
-        rgGender = findViewById(R.id.radioGroupGender);
+        rgGender = findViewById(R.id.radio_group_gender);
 
         rgGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -119,9 +125,37 @@ public class UserRegister extends AppCompatActivity {
             }
         });
     }
+    private boolean convertAndCompressImage() {
+//        Convert ImageView to Bitmap
+        Bitmap bitmap = ((BitmapDrawable) ivProfile.getDrawable()).getBitmap();
+
+// Convert bitmap to byte array
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, COMPRESS_QUALITY, bos);
+        byte[] bitmapData = bos.toByteArray();
+
+// Check the size of the byte array
+        int imageSizeKB = bitmapData.length / 1024; // Size in KB
+
+// Set a limit for the image size (for example, 1024 KB = 1 MB)
+        int limitKB = 500;
+
+// If the image size exceeds the limit, show a warning message
+        if (imageSizeKB > limitKB) {
+            return false;
+        } else {
+            imageBytes = bitmapData;
+            return true;
+        }
+    }
 
     private void validate() {
-//        int selectedId = rgGender.getCheckedRadioButtonId();
+        if(ivProfile.getDrawable() != null) {
+            if(!convertAndCompressImage()) {
+                Toast.makeText(this, "Image is too large. Select an image smaller than 500 KB", Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
 
         if (etName.getText().toString().isEmpty()) {
             etName.setError("Name is required");
@@ -209,7 +243,11 @@ public class UserRegister extends AppCompatActivity {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        etDOB.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        Calendar selectedDate = Calendar.getInstance();
+                        selectedDate.set(year, monthOfYear, dayOfMonth);
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                        String formattedDate = sdf.format(selectedDate.getTime());
+                        etDOB.setText(formattedDate);
                     }
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();
@@ -226,6 +264,7 @@ public class UserRegister extends AppCompatActivity {
         userModel.setGender(gender);
         userModel.setTelephone(etTp.getText().toString());
         userModel.setPassword(etPassword.getText().toString());
+        userModel.setImageBytes(imageBytes);
 
             Intent intent = new Intent(UserRegister.this, UserConfirmation.class);
             intent.putExtra("user", userModel);

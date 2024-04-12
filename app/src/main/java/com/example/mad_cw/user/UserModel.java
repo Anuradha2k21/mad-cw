@@ -1,6 +1,7 @@
 package com.example.mad_cw.user;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class UserModel implements Serializable {
     private int id;
@@ -13,8 +14,9 @@ public class UserModel implements Serializable {
     private String city;
     private String nic;
     private String dob;
+    private byte[] imageBytes;
 
-    public UserModel(int id, String name, String email, String password, String telephone, String gender, String address, String city, String nic, String dob) {
+    public UserModel(int id, String name, String email, String password, String telephone, String gender, String address, String city, String nic, String dob, byte[] imageBytes) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -25,9 +27,11 @@ public class UserModel implements Serializable {
         this.city = city;
         this.nic = nic;
         this.dob = dob;
+        this.imageBytes = imageBytes;
     }
 
-    public UserModel(String name, String email, String password, String telephone, String gender, String address, String city, String nic, String dob) {
+
+    public UserModel(String name, String email, String password, String telephone, String gender, String address, String city, String nic, String dob, byte[] imageBytes) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -37,7 +41,9 @@ public class UserModel implements Serializable {
         this.city = city;
         this.nic = nic;
         this.dob = dob;
+        this.imageBytes = imageBytes;
     }
+
 
     @Override
     public String toString() {
@@ -52,6 +58,7 @@ public class UserModel implements Serializable {
                 ", city='" + city + '\'' +
                 ", nic='" + nic + '\'' +
                 ", dob='" + dob + '\'' +
+                ", image=" + Arrays.toString(imageBytes) +
                 '}';
     }
 
@@ -136,5 +143,13 @@ public class UserModel implements Serializable {
 
     public void setDob(String dob) {
         this.dob = dob;
+    }
+
+    public byte[] getImageBytes() {
+        return imageBytes;
+    }
+
+    public void setImageBytes(byte[] imageBytes) {
+        this.imageBytes = imageBytes;
     }
 }
