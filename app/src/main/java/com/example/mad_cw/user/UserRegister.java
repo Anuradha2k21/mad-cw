@@ -318,6 +318,7 @@ public class UserRegister extends AppCompatActivity {
                 startActivityForResult(pickPhoto, REQUEST_IMAGE_PICK);
             } else if (options[item].equals("Remove Photo")) {
                 ivProfile.setImageDrawable(null);
+                imageBytes = null;
             } else if (options[item].equals("Cancel")) {
                 dialog.dismiss();
             }
