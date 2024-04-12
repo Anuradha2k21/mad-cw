@@ -2,8 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="gray">#bdc3c7</color>
+    <color name="grey">#bdc3c7</color>
     <color name="american_river">#636e72</color>
     <color name="mazarine_blue">#273c75</color>
     <color name="red_warning">	#ff0f0f</color>
+    <color name="url_blue">#0000FF</color>
+    <color name="lavender">#8692f7</color>
+    <color name="grey_new">#d2d2d2</color>
+    <color name="button_blue">#4A89F3</color>
+    <color name="iron_grey">#616569</color>
 </resources>
