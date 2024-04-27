@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //  database attributes
     private static final String DB_NAME = "course.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 5;
 
     //  admin table attributes
     private static final String ADMIN_TABLE_NAME = "admin_table";
@@ -63,6 +63,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String USER_COLUMN_IMAGE = "image";
     private ArrayList<UserModel> userList;
     private UserModel userModel;
+
+    // course registration table attributes
+    private static final String COURSE_REGISTRATION_TABLE_NAME = "course_registration_table";
+    private static final String COURSE_REGISTRATION_COLUMN_ID = "_id";
+    private static final String COURSE_REGISTRATION_COLUMN_COURSE_NAME = "course_name";
+    private static final String COURSE_REGISTRATION_COLUMN_COURSE_BRANCH = "course_branch";
+    private static final String COURSE_REGISTRATION_COLUMN_FULL_NAME = "full_name";
+    private static final String COURSE_REGISTRATION_COLUMN_NIC = "nic";
+    private static final String COURSE_REGISTRATION_COLUMN_EMAIL = "email";
+    private static final String COURSE_REGISTRATION_COLUMN_CONTACT_NO = "contact_no";
+    private static final String COURSE_REGISTRATION_COLUMN_ADDRESS = "address";
+    private static final String COURSE_REGISTRATION_COLUMN_PROMOTION_CODE = "promotion_code";
+    private static final String COURSE_REGISTRATION_COLUMN_COURSE_FEE = "course_fee";
+    private static final String COURSE_REGISTRATION_COLUMN_DISCOUNT_AMOUNT = "discount_amount";
+    private static final String COURSE_REGISTRATION_COLUMN_FINAL_TOTAL = "final_total";
+
+    //  promotion table attributes
+    private static final String PROMOTION_CODE_TABLE_NAME = "promotion_code";
+    private static final String PROMOTION_CODE_COLUMN_ID = "_id";
+    private static final String PROMOTION_CODE_COLUMN_PROMO_CODE = "promo_code";
+    private static final String PROMOTION_CODE_COLUMN_DISCOUNT_PERCENTAGE = "discount_percentage";
+
+
+
+
     public DatabaseHelper(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
@@ -109,14 +134,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 USER_COLUMN_DOB + " TEXT, " +
                 USER_COLUMN_IMAGE + " BLOB);";
         db.execSQL(userQuery);
+
+        // Create the course registration table with a foreign key relationship to the course table
+        String courseRegistrationQuery = "CREATE TABLE " + COURSE_REGISTRATION_TABLE_NAME +
+                " (" + COURSE_REGISTRATION_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COURSE_REGISTRATION_COLUMN_COURSE_NAME + " TEXT, " +
+                COURSE_REGISTRATION_COLUMN_COURSE_BRANCH + " TEXT, " +
+                COURSE_REGISTRATION_COLUMN_FULL_NAME + " TEXT, " +
+                COURSE_REGISTRATION_COLUMN_NIC + " TEXT, " +
+                COURSE_REGISTRATION_COLUMN_EMAIL + " TEXT, " +
+                COURSE_REGISTRATION_COLUMN_CONTACT_NO + " TEXT, " +
+                COURSE_REGISTRATION_COLUMN_ADDRESS + " TEXT, " +
+                COURSE_REGISTRATION_COLUMN_PROMOTION_CODE + " TEXT, " +
+                COURSE_REGISTRATION_COLUMN_COURSE_FEE + " REAL, " +
+                COURSE_REGISTRATION_COLUMN_DISCOUNT_AMOUNT + " REAL, " +
+                COURSE_REGISTRATION_COLUMN_FINAL_TOTAL + " REAL);";
+        db.execSQL(courseRegistrationQuery);
+
+        // Create the promotion code table
+        String promotionCodeQuery = "CREATE TABLE " + PROMOTION_CODE_TABLE_NAME +
+                " (" + PROMOTION_CODE_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                PROMOTION_CODE_COLUMN_PROMO_CODE + " TEXT, " +
+                PROMOTION_CODE_COLUMN_DISCOUNT_PERCENTAGE + " REAL);";
+        db.execSQL(promotionCodeQuery);
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + ADMIN_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + COURSE_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + COURSE_REGISTRATION_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + PROMOTION_CODE_TABLE_NAME);
         onCreate(db);
     }
+
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        onUpgrade(db, oldVersion, newVersion);
+    }
+
     public boolean addUser(UserModel userModel) throws SQLException {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -339,4 +395,122 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return adminModel;
     }
+
+    public void addDummyPromotionCode() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Create a list of dummy courses
+        ArrayList<PromotionCodeModel> dummyPromoCode = new ArrayList<>();
+        dummyPromoCode.add(new PromotionCodeModel("M563432",25.0));
+        dummyPromoCode.add(new PromotionCodeModel("S663435",40.0));
+        dummyPromoCode.add(new PromotionCodeModel("L763434",60.0));
+
+        // Insert each course into the database
+        for (PromotionCodeModel promotionCode : dummyPromoCode) {
+            ContentValues cv = new ContentValues();
+            cv.put(PROMOTION_CODE_COLUMN_PROMO_CODE, promotionCode.getPromoCode());
+            cv.put(PROMOTION_CODE_COLUMN_DISCOUNT_PERCENTAGE, promotionCode.getDiscountPercentage());
+
+            long result = db.insert(PROMOTION_CODE_TABLE_NAME, null, cv);
+
+            if (result == -1) {
+                Toast.makeText(context, "Failed to insert promotion code", Toast.LENGTH_SHORT).show();
+            }
+            else {
+//                Toast.makeText(context, "Successfully inserted promotion code", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public boolean addOnePromotionCode(PromotionCodeModel promotionCodeModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(PROMOTION_CODE_COLUMN_PROMO_CODE, promotionCodeModel.getPromoCode());
+        cv.put(PROMOTION_CODE_COLUMN_DISCOUNT_PERCENTAGE, promotionCodeModel.getDiscountPercentage());
+
+        long insert = db.insert(PROMOTION_CODE_TABLE_NAME, null, cv);
+        return insert != -1;
+    }
+
+    public double getDiscountPercentageByPromoCode(String promoCode) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double discountPercentage = 0;
+
+        String query = "SELECT " + PROMOTION_CODE_COLUMN_DISCOUNT_PERCENTAGE + " FROM " + PROMOTION_CODE_TABLE_NAME +
+                " WHERE " + PROMOTION_CODE_COLUMN_PROMO_CODE + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{promoCode});
+
+        if (cursor.moveToFirst()) {
+            discountPercentage = cursor.getDouble(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return discountPercentage;
+    }
+
+    public boolean isValidPromotionCode(String promoCode) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT * FROM " + PROMOTION_CODE_TABLE_NAME +
+                " WHERE " + PROMOTION_CODE_COLUMN_PROMO_CODE + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{promoCode});
+
+        boolean isValid = cursor.getCount() > 0;
+
+        cursor.close();
+        db.close();
+
+        return isValid;
+    }
+
+    public boolean addCourseRegistration(CourseRegisterModel courseRegisterModel,double courseFee,double discountAmount, double finalTotal){
+        Log.d("DatabaseHelper", "Adding course registration to the database...");
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(COURSE_REGISTRATION_COLUMN_COURSE_NAME, courseRegisterModel.getCourse_name());
+        cv.put(COURSE_REGISTRATION_COLUMN_COURSE_BRANCH, courseRegisterModel.getCourse_branch());
+        cv.put(COURSE_REGISTRATION_COLUMN_FULL_NAME, courseRegisterModel.getName());
+        cv.put(COURSE_REGISTRATION_COLUMN_NIC, courseRegisterModel.getNic());
+        cv.put(COURSE_REGISTRATION_COLUMN_EMAIL, courseRegisterModel.getEmail());
+        cv.put(COURSE_REGISTRATION_COLUMN_CONTACT_NO, courseRegisterModel.getTelephone());
+        cv.put(COURSE_REGISTRATION_COLUMN_ADDRESS, courseRegisterModel.getAddress());
+        cv.put(COURSE_REGISTRATION_COLUMN_PROMOTION_CODE, courseRegisterModel.getPromotionCode());
+        cv.put(COURSE_REGISTRATION_COLUMN_COURSE_FEE, courseFee);
+        cv.put(COURSE_REGISTRATION_COLUMN_DISCOUNT_AMOUNT, discountAmount);
+        cv.put(COURSE_REGISTRATION_COLUMN_FINAL_TOTAL, finalTotal);
+
+        try {
+            long insert = db.insertOrThrow(COURSE_REGISTRATION_TABLE_NAME, null, cv);
+            return insert != -1;
+        } catch (android.database.SQLException e) {
+            Log.e("DatabaseHelper", "Error inserting course registration: " + e.getMessage());
+            return false;
+        } finally {
+            db.close(); // Close the database connection
+        }
+    }
+
+    public double getCourseFeeByCourseId(int courseId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double courseFee = 0;
+
+        String query = "SELECT " + COURSE_COLUMN_FEE + " FROM " + COURSE_TABLE_NAME +
+                " WHERE " + COURSE_COLUMN_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(courseId)});
+
+        if (cursor.moveToFirst()) {
+            courseFee = cursor.getDouble(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return courseFee;
+    }
+
+
 }

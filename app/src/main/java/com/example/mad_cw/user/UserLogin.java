@@ -28,7 +28,7 @@ import com.example.mad_cw.admin.AdminLogin;
 import com.example.mad_cw.course.CourseRecyclerView;
 
 public class UserLogin extends AppCompatActivity {
-    private LinearLayout adminClick;
+
     private EditText etEmail, etPassword;
     private Button btnLogin, btnRegister, btnGuest;
     private ImageButton btnViewPassword;
@@ -45,6 +45,7 @@ public class UserLogin extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user_login);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
         btnViewPassword = findViewById(R.id.btn_view_password);
         etPassword = findViewById(R.id.txt_pword);
         etEmail = findViewById(R.id.txt_email);
@@ -55,6 +56,9 @@ public class UserLogin extends AppCompatActivity {
         rememberMe = findViewById(R.id.checkBox);
         tvForgotPassword = findViewById(R.id.tv_forgot_pword);
         sharedPreferences = getSharedPreferences("UserLogin", MODE_PRIVATE);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // Check if user details exist in SharedPreferences
         if (sharedPreferences.contains("Email") && sharedPreferences.contains("Password")) {
@@ -100,6 +104,22 @@ public class UserLogin extends AppCompatActivity {
             }
         });
         changeTextColorToDefault();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.login_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.admin_login){
+            Intent intent = new Intent(this, AdminLogin.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void validate() {

@@ -1,6 +1,8 @@
 package com.example.mad_cw.course;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +14,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mad_cw.R;
+import com.example.mad_cw.user.UserLogin;
 
 import java.util.ArrayList;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.MyViewHolder> {
     private Context context;
     private ArrayList<CourseModel> courseList;
+    private boolean isLoggedIn;
 
-    public CourseAdapter(Context context, ArrayList<CourseModel> courseList) {
+    public CourseAdapter(Context context, ArrayList<CourseModel> courseList, boolean isLoggedIn) {
         this.context = context;
         this.courseList = courseList;
+        this.isLoggedIn = isLoggedIn;
     }
 
     @NonNull
@@ -48,14 +53,26 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.MyViewHold
             }
         });
 
-        holder.btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Register button clicked for course: " + courseModel.getName(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+        if (isLoggedIn) {
+            // If user is logged in, enable the register button
+            holder.btnRegister.setOnClickListener(v -> {
+                Intent intent = new Intent(context, CourseRegistrationForm.class);
+                intent.putExtra("course_id", courseModel.getId());
+                intent.putExtra("course_name", courseModel.getName());
+                context.startActivity(intent);
+                //Toast.makeText(context, "Register button clicked for course: " + courseModel.getName(), Toast.LENGTH_SHORT).show();
+            });
+        }
+        else {
+            // If user is not logged in, show a message and redirect to login page when register button clicked
+            holder.btnRegister.setOnClickListener(v -> {
+                Toast.makeText(context, "Please sign up to register for this course", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, UserLogin.class);
+                context.startActivity(intent);
+            });
+        }
 
+    }
     @Override
     public int getItemCount() {
         return courseList.size();

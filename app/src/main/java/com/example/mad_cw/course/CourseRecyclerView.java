@@ -40,6 +40,7 @@ public class CourseRecyclerView extends AppCompatActivity {
     private ImageButton backButton, optionsButton;
     UserModel userModel;
     AdminModel adminModel;
+    boolean isLoggedIn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +53,7 @@ public class CourseRecyclerView extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
+        isLoggedIn = intent.getBooleanExtra("isLoggedIn", false);
         userModel = (UserModel) intent.getSerializableExtra("user");
 //        adminModel = (AdminModel) intent.getSerializableExtra("admin");
 

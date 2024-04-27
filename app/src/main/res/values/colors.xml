@@ -6,9 +6,16 @@
     <color name="american_river">#636e72</color>
     <color name="mazarine_blue">#273c75</color>
     <color name="red_warning">	#ff0f0f</color>
+    <color name="off_white">#F5F5F5</color>
 
     <color name="button_pressed_color">#496989</color>
 
     <color name="forgot_password_pressed_color">#023e8a</color>
     <color name="forgot_password_default_color">#0096c7</color>
+
+    <color name="url_blue">#0000FF</color>
+    <color name="lavender">#8692f7</color>
+    <color name="grey_new">#d2d2d2</color>
+    <color name="button_blue">#4A89F3</color>
+    <color name="iron_grey">#616569</color>
 </resources>

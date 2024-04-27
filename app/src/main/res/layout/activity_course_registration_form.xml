@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".course.CourseRegistrationForm">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="873dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="87dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/course_registration_title"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="749dp"
+                android:layout_marginTop="10dp">
+
+                <EditText
+                    android:id="@+id/edit_text_course_name"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittxt_bkg"
+                    android:enabled="false"
+                    android:inputType="text"
+                    android:padding="8dp"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.93"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.026" />
+
+                <TextView
+                    android:id="@+id/lbl_branch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/branch"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/course_name" />
+
+                <Spinner
+                    android:id="@+id/spinner_branch"
+                    android:layout_width="217dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="88dp"
+                    android:layout_marginTop="24dp"
+                    android:spinnerMode="dropdown"
+                    app:layout_constraintStart_toEndOf="@+id/lbl_branch"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_text_course_name"
+                    tools:ignore="MissingConstraints" />
+
+                <TextView
+                    android:id="@+id/link_nearby_branches"
+                    android:layout_width="163dp"
+                    android:layout_height="18dp"
+                    android:layout_marginTop="24dp"
+                    android:textColor="@color/url_blue"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.698"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/spinner_branch" />
+
+                <TextView
+                    android:id="@+id/st_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="30dp"
+                    android:gravity="start"
+                    android:text="@string/student_information"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.011"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/link_nearby_branches" />
+
+                <EditText
+                    android:id="@+id/edit_text_full_name"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="88dp"
+                    android:background="@drawable/edittxt_bkg"
+                    android:hint="@string/john_doe"
+                    android:inputType="text"
+                    android:padding="8dp"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.93"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/link_nearby_branches" />
+
+                <EditText
+                    android:id="@+id/txt_promo"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/edittxt_bkg"
+                    android:padding="8dp"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.93"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+                <TextView
+                    android:id="@+id/lbl_promoCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/select_promotion_code"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/txt_promo"
+                    app:layout_constraintHorizontal_bias="0.028"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+                <Button
+                    android:id="@+id/btn_submit"
+                    android:layout_width="208dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="20dp"
+                    android:backgroundTint="#03A9F4"
+                    android:text="@string/submit"
+                    app:cornerRadius="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_promo" />
+
+                <TextView
+                    android:id="@+id/lbl_fullName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="42dp"
+                    android:text="@string/full_name"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/edit_text_full_name"
+                    app:layout_constraintHorizontal_bias="0.05"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/st_info" />
+
+                <TextView
+                    android:id="@+id/lbl_NIC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="38dp"
+                    android:text="@string/nic"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/edit_text_NIC"
+                    app:layout_constraintHorizontal_bias="0.029"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lbl_fullName" />
+
+                <TextView
+                    android:id="@+id/lbl_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="38dp"
+                    android:text="@string/email"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/txt_email"
+                    app:layout_constraintHorizontal_bias="0.035"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lbl_NIC" />
+
+                <EditText
+                    android:id="@+id/txt_email"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/edittxt_bkg"
+                    android:hint="@string/johndoe_gmail_com"
+                    android:padding="8dp"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.93"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_text_NIC" />
+
+                <EditText
+                    android:id="@+id/txt_tp"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/edittxt_bkg"
+                    android:hint="@string/tp_txt"
+                    android:padding="8dp"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.93"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_email" />
+
+                <EditText
+                    android:id="@+id/txt_address"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/edittxt_bkg"
+                    android:padding="8dp"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.93"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_tp" />
+
+                <TextView
+                    android:id="@+id/lbl_tp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="40dp"
+                    android:text="@string/contact_no"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/txt_tp"
+                    app:layout_constraintHorizontal_bias="0.056"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lbl_email" />
+
+                <TextView
+                    android:id="@+id/lbl_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="36dp"
+                    android:text="@string/address"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/txt_address"
+                    app:layout_constraintHorizontal_bias="0.032"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lbl_tp" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="382dp"
+                    android:layout_height="39dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:gravity="start"
+                    android:text="@string/label"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_address" />
+
+                <EditText
+                    android:id="@+id/edit_text_NIC"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/edittxt_bkg"
+                    android:inputType="text"
+                    android:padding="8dp"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.93"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_text_full_name" />
+
+                <TextView
+                    android:id="@+id/course_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:text="@string/course_name"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/edit_text_course_name"
+                    app:layout_constraintHorizontal_bias="0.177"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
