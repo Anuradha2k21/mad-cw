@@ -32,3 +32,32 @@ path: mad-cw\app\src\main\res\values\strings.xml
 email: admin@gmail.com
 
 password: 12345678
+
+## adding environmental variables
+add `buildFeatures`, `buildConfigField` to module(app) level *build.gradle* file
+and
+replace `email_address`, `email_password`
+
+```bash
+android {
+    buildFeatures {
+        buildConfig true
+    }
+
+    defaultConfig {
+	...
+        buildConfigField "String", "SENDER_EMAIL_ADDRESS", "\"email_address\""
+        buildConfigField "String", "SENDER_EMAIL_PASSWORD", "\"email_password\""
+    }
+}
+```
+remeber to sync gradle
+
+### how to access from *UserConfirmation.java*
+
+stringSenderEmail = BuildConfig.SENDER_EMAIL_ADDRESS
+
+stringPasswordSenderEmail = BuildConfig.SENDER_EMAIL_PASSWORD
+
+---
+also don't forget to add that *build.gradle* file to gitignore
