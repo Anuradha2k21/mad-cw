@@ -45,7 +45,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.MyViewHold
         holder.btnDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Details button clicked for course: " + courseModel.getName(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Details button clicked for course: " + courseModel.getName(), Toast.LENGTH_SHORT).show();
                 // Create an Intent to navigate to the CourseDetailView activity
                 Intent intent = new Intent(context, CourseDetailView.class);
 
