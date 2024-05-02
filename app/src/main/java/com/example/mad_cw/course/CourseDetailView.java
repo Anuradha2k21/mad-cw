@@ -2,10 +2,12 @@ package com.example.mad_cw.course;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mad_cw.DatabaseHelper;
 import com.example.mad_cw.R;
@@ -54,8 +56,16 @@ public class CourseDetailView extends Activity {
             durationTextView.setText("Duration: " + courseModel.getDuration());
         }
 
+        Button registerButton = findViewById(R.id.register_button);
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Register Button
+            }
+        });
+
         // Set click listener for the "Back" button
-        Button backButton = findViewById(R.id.button);
+        Button backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
