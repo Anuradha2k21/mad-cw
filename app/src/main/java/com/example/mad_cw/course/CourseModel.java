@@ -42,7 +42,7 @@ public class CourseModel implements Serializable {
         this.duration = duration;
     }
 
-    public CourseModel() {
+    public CourseModel(long courseId, String name, String description, String branch, int availableSeats, String registrationClosingDate, String courseStartDate, String duration, String publishDate, double fee, String instructor) {
     }
 
     @Override
@@ -148,5 +148,9 @@ public class CourseModel implements Serializable {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public CourseModel getCourse(int courseId) {
+        return null;
     }
 }

@@ -1,11 +1,15 @@
 package com.example.mad_cw;
 
+import static android.content.ContentValues.TAG;
+
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -306,6 +310,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return courseList;
     }
 
+    public CourseModel getCourse(int courseId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Log the courseId
+        Log.d(TAG, "Fetching details for course with ID: " + courseId);
+
+        // Construct the SQL query
+        String query = "SELECT * FROM " + COURSE_TABLE_NAME +
+                " WHERE " + COURSE_COLUMN_ID + " = ?";
+
+        // Log the SQL query
+        Log.d(TAG, "SQL Query: " + query);
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(courseId)});
+
+        CourseModel course = null;
+
+        if (cursor.moveToFirst()) {
+            @SuppressLint("Range") String courseName = cursor.getString(cursor.getColumnIndex(COURSE_COLUMN_NAME));
+            @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex(COURSE_COLUMN_DESCRIPTION));
+            @SuppressLint("Range") String courseBranch = cursor.getString(cursor.getColumnIndex(COURSE_COLUMN_BRANCH));
+            @SuppressLint("Range") int availableSeats = cursor.getInt(cursor.getColumnIndex(COURSE_COLUMN_AVAILABLE_SEATS));
+            @SuppressLint("Range") String registrationClosingDate = cursor.getString(cursor.getColumnIndex(COURSE_COLUMN_REGISTRATION_CLOSING_DATE));
+            @SuppressLint("Range") String courseStartDate = cursor.getString(cursor.getColumnIndex(COURSE_COLUMN_COURSE_START_DATE));
+            @SuppressLint("Range") String duration = cursor.getString(cursor.getColumnIndex(COURSE_COLUMN_DURATION));
+            @SuppressLint("Range") String publishDate = cursor.getString(cursor.getColumnIndex(COURSE_COLUMN_PUBLISH_DATE));
+            @SuppressLint("Range") double fee = cursor.getDouble(cursor.getColumnIndex(COURSE_COLUMN_FEE));
+            @SuppressLint("Range") String instructor = cursor.getString(cursor.getColumnIndex(COURSE_COLUMN_INSTRUCTOR));
+            course = new CourseModel(courseName, description, courseBranch, availableSeats, registrationClosingDate, courseStartDate, duration, publishDate, fee, instructor);
+        } else {
+            // Log if no course details found
+            Log.d(TAG, "No course details found for course ID: " + courseId);
+        }
+
+        cursor.close();
+        db.close();
+
+        return course;}
+
     public void addDummyAdmin() {
         adminModel = new AdminModel("admin@gmail.com", "12345678");
         SQLiteDatabase db = this.getWritableDatabase();
@@ -313,12 +356,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cv.put(ADMIN_COLUMN_EMAIL, adminModel.getEmail());
         cv.put(ADMIN_COLUMN_PASSWORD, adminModel.getPassword());
-
         db.insert(ADMIN_TABLE_NAME, null, cv);
         db.close();
     }
-
-
 
     public AdminModel checkAdminLogin(String mail, String pword) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -339,4 +379,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return adminModel;
     }
+
 }
+
+
