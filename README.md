@@ -23,7 +23,41 @@ path: mad-cw\app\src\main\java\com\example\mad_cw\user\UserConfirmation.java
 
 ![image](https://github.com/Anuradha2k21/mad-cw/assets/61109105/15e25842-0dd1-4c26-a09b-62569a985b1b)
 
+# update the MAPS_API_KEY at "strings.xml"
+path: mad-cw\app\src\main\res\values\strings.xml
+
+![image](https://github.com/Anuradha2k21/mad-cw/assets/146810679/f6627572-a78f-4164-9cca-d77aba6dcced)
+
 ## admin pannel
 email: admin@gmail.com
 
 password: 12345678
+
+## adding environmental variables
+add `buildFeatures`, `buildConfigField` to module(app) level *build.gradle* file
+and
+replace `email_address`, `email_password`
+
+```bash
+android {
+    buildFeatures {
+        buildConfig true
+    }
+
+    defaultConfig {
+	...
+        buildConfigField "String", "SENDER_EMAIL_ADDRESS", "\"email_address\""
+        buildConfigField "String", "SENDER_EMAIL_PASSWORD", "\"email_password\""
+    }
+}
+```
+remeber to sync gradle
+
+### how to access from *UserConfirmation.java*
+
+stringSenderEmail = BuildConfig.SENDER_EMAIL_ADDRESS
+
+stringPasswordSenderEmail = BuildConfig.SENDER_EMAIL_PASSWORD
+
+---
+also don't forget to add that *build.gradle* file to gitignore

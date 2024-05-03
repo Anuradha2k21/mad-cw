@@ -4,8 +4,10 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Context;
 import android.content.Intent;
+
 import android.content.SharedPreferences;
 import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,11 +52,24 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.MyViewHold
         holder.availableSeats.setText(String.valueOf(courseModel.getAvailableSeats()));
         holder.branches.setText(String.valueOf(courseModel.getBranch()));
 
-        holder.btnDetails.setOnClickListener(v -> {
-            Log.d(TAG, "Details button clicked for course: " + courseModel.getId());
-            //Toast.makeText(context, "Details button clicked for course: " + courseModel.getName(), Toast.LENGTH_SHORT).show();
-            // Create an Intent to navigate to the CourseDetailView activity
-            Intent intent = new Intent(context, CourseDetailView.class);
+
+        holder.btnDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Toast.makeText(context, "Details button clicked for course: " + courseModel.getName(), Toast.LENGTH_SHORT).show();
+                // Create an Intent to navigate to the CourseDetailView activity
+                Intent intent = new Intent(context, CourseDetailView.class);
+
+                // Pass the course ID to the CourseDetailView activity
+                intent.putExtra("course_id", courseModel.getId());
+
+                // Start the CourseDetailView activity
+                context.startActivity(intent);
+            }
+
+
+        });
+
 
             // Pass the course ID to the CourseDetailView activity
             intent.putExtra("course_id", courseModel.getId());

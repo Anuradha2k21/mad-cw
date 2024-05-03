@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mad_cw.BuildConfig;
 import com.example.mad_cw.DatabaseHelper;
 import com.example.mad_cw.R;
 
@@ -66,9 +67,9 @@ public class UserConfirmation extends AppCompatActivity {
 
     private void sendEmail() {
         try {
-            String stringSenderEmail = "";
+            String stringSenderEmail = BuildConfig.SENDER_EMAIL_ADDRESS;
             String stringReceiverEmail = userModel.getEmail();
-            String stringPasswordSenderEmail = "";
+            String stringPasswordSenderEmail = BuildConfig.SENDER_EMAIL_PASSWORD;
 
             String stringHost = "smtp.gmail.com";
 

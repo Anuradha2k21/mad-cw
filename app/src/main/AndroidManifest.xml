@@ -68,6 +68,10 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
+            android:name=".course.CourseDetailView"
+            android:exported="false" />
+
+        <activity
             android:name=".user.UserLogin"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" >
