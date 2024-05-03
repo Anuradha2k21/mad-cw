@@ -1,17 +1,23 @@
 package com.example.mad_cw;
 
+import static android.content.ContentValues.TAG;
+
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.example.mad_cw.admin.AdminModel;
 import com.example.mad_cw.course.CourseModel;
+import com.example.mad_cw.course.CourseRegisterModel;
+import com.example.mad_cw.course.PromotionCodeModel;
 import com.example.mad_cw.user.UserModel;
 
 import java.sql.SQLException;
@@ -48,22 +54,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private ArrayList<CourseModel> courseList;
     private CourseModel courseModel;
 
-    //  user table attributes
-    private static final String USER_TABLE_NAME = "user_table";
-    private static final String USER_COLUMN_ID = "_id";
-    private static final String USER_COLUMN_NAME = "name";
-    private static final String USER_COLUMN_EMAIL = "email";
-    private static final String USER_COLUMN_PASSWORD = "password";
-    private static final String USER_COLUMN_TELEPHONE = "telephone";
-    private static final String USER_COLUMN_GENDER = "gender";
-    private static final String USER_COLUMN_ADDRESS = "address";
-    private static final String USER_COLUMN_CITY = "city";
-    private static final String USER_COLUMN_NIC = "nic";
-    private static final String USER_COLUMN_DOB = "dob";
-    private static final String USER_COLUMN_IMAGE = "image";
-    private ArrayList<UserModel> userList;
-    private UserModel userModel;
-
     // course registration table attributes
     private static final String COURSE_REGISTRATION_TABLE_NAME = "course_registration_table";
     private static final String COURSE_REGISTRATION_COLUMN_ID = "_id";
@@ -85,8 +75,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String PROMOTION_CODE_COLUMN_PROMO_CODE = "promo_code";
     private static final String PROMOTION_CODE_COLUMN_DISCOUNT_PERCENTAGE = "discount_percentage";
 
-
-
+    //  user table attributes
+    private static final String USER_TABLE_NAME = "user_table";
+    private static final String USER_COLUMN_ID = "_id";
+    private static final String USER_COLUMN_NAME = "name";
+    private static final String USER_COLUMN_EMAIL = "email";
+    private static final String USER_COLUMN_PASSWORD = "password";
+    private static final String USER_COLUMN_TELEPHONE = "telephone";
+    private static final String USER_COLUMN_GENDER = "gender";
+    private static final String USER_COLUMN_ADDRESS = "address";
+    private static final String USER_COLUMN_CITY = "city";
+    private static final String USER_COLUMN_NIC = "nic";
+    private static final String USER_COLUMN_DOB = "dob";
+    private static final String USER_COLUMN_IMAGE = "image";
+    private ArrayList<UserModel> userList;
+    private UserModel userModel;
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -120,21 +123,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COURSE_COLUMN_INSTRUCTOR + " TEXT);";
         db.execSQL(courseQuery);
 
-        //  create user table
-        String userQuery = "CREATE TABLE " + USER_TABLE_NAME +
-                " (" + USER_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                USER_COLUMN_NAME + " TEXT, " +
-                USER_COLUMN_EMAIL + " TEXT, " +
-                USER_COLUMN_PASSWORD + " TEXT, " +
-                USER_COLUMN_TELEPHONE + " TEXT, " +
-                USER_COLUMN_GENDER + " TEXT, " +
-                USER_COLUMN_ADDRESS + " TEXT, " +
-                USER_COLUMN_CITY + " TEXT, " +
-                USER_COLUMN_NIC + " TEXT, " +
-                USER_COLUMN_DOB + " TEXT, " +
-                USER_COLUMN_IMAGE + " BLOB);";
-        db.execSQL(userQuery);
-
         // Create the course registration table with a foreign key relationship to the course table
         String courseRegistrationQuery = "CREATE TABLE " + COURSE_REGISTRATION_TABLE_NAME +
                 " (" + COURSE_REGISTRATION_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -157,8 +145,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 PROMOTION_CODE_COLUMN_PROMO_CODE + " TEXT, " +
                 PROMOTION_CODE_COLUMN_DISCOUNT_PERCENTAGE + " REAL);";
         db.execSQL(promotionCodeQuery);
-    }
 
+        //  create user table
+        String userQuery = "CREATE TABLE " + USER_TABLE_NAME +
+                " (" + USER_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                USER_COLUMN_NAME + " TEXT, " +
+                USER_COLUMN_EMAIL + " TEXT, " +
+                USER_COLUMN_PASSWORD + " TEXT, " +
+                USER_COLUMN_TELEPHONE + " TEXT, " +
+                USER_COLUMN_GENDER + " TEXT, " +
+                USER_COLUMN_ADDRESS + " TEXT, " +
+                USER_COLUMN_CITY + " TEXT, " +
+                USER_COLUMN_NIC + " TEXT, " +
+                USER_COLUMN_DOB + " TEXT, " +
+                USER_COLUMN_IMAGE + " BLOB);";
+        db.execSQL(userQuery);
+    }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + ADMIN_TABLE_NAME);
@@ -168,7 +170,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + PROMOTION_CODE_TABLE_NAME);
         onCreate(db);
     }
-
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
@@ -189,7 +190,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(USER_COLUMN_IMAGE, userModel.getImageBytes());
 
         long insert = db.insertOrThrow(USER_TABLE_NAME, null, cv);
-        return insert == -1 ? false : true;
+        return insert != -1;
     }
     public UserModel updateUser(UserModel userModel) throws SQLException {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -282,9 +283,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // Create a list of dummy courses
         ArrayList<CourseModel> dummyCourses = new ArrayList<>();
-        dummyCourses.add(new CourseModel("Java Fundamentals", "Learn the basics of Java", "Colombo", 10, "2023-01-01", "2023-02-01", "1 month", "2022-12-01", 100.0, "John Doe"));
-        dummyCourses.add(new CourseModel("Python for Beginners", "Start your coding journey with Python", "Kandy", 15, "2023-03-01", "2023-04-01", "1 month", "2023-02-01", 80.0, "Jane Doe"));
-        // Add more courses as needed
+        dummyCourses.add(new CourseModel("Java Fundamentals", "Learn the basics of Java", "Colombo", 10, "2023-01-01", "2023-02-01", "1 month", "2022-12-01", 80000.0, "John Doe"));
+        dummyCourses.add(new CourseModel("Python for Beginners", "Start your coding journey with Python", "Kandy", 15, "2023-03-01", "2023-04-01", "1 month", "2023-02-01", 850000.0, "Jane Doe"));
 
         // Insert each course into the database
         for (CourseModel course : dummyCourses) {
@@ -304,7 +304,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             if (result == -1) {
                 Toast.makeText(context, "Failed to insert course: " + course.getName(), Toast.LENGTH_SHORT).show();
-            } else {
+            }
+            else {
 //                Toast.makeText(context, "Successfully inserted course: " + course.getName(), Toast.LENGTH_SHORT).show();
             }
         }
@@ -326,7 +327,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COURSE_COLUMN_INSTRUCTOR, courseModel.getInstructor());
 
         long insert = db.insert(COURSE_TABLE_NAME, null, cv);
-        return insert == -1 ? false : true;
+        return insert != -1;
     }
 
     public ArrayList<CourseModel> getAllCourses() {
@@ -373,8 +374,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(ADMIN_TABLE_NAME, null, cv);
         db.close();
     }
-
-
 
     public AdminModel checkAdminLogin(String mail, String pword) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -512,5 +511,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return courseFee;
     }
 
+    public CourseModel getCourse(int courseId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Log the courseId
+        Log.d(TAG, "Fetching details for course with ID: " + courseId);
+
+        // Construct the SQL query
+        String query = "SELECT * FROM " + COURSE_TABLE_NAME +
+                " WHERE " + COURSE_COLUMN_ID + " = ?";
+
+        // Log the SQL query
+        Log.d(TAG, "SQL Query: " + query);
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(courseId)});
+
+        CourseModel course = null;
+
+        if (cursor.moveToFirst()) {
+            @SuppressLint("Range") String courseName = cursor.getString(cursor.getColumnIndex(COURSE_COLUMN_NAME));
+            @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex(COURSE_COLUMN_DESCRIPTION));
+            @SuppressLint("Range") String courseBranch = cursor.getString(cursor.getColumnIndex(COURSE_COLUMN_BRANCH));
+            @SuppressLint("Range") int availableSeats = cursor.getInt(cursor.getColumnIndex(COURSE_COLUMN_AVAILABLE_SEATS));
+            @SuppressLint("Range") String registrationClosingDate = cursor.getString(cursor.getColumnIndex(COURSE_COLUMN_REGISTRATION_CLOSING_DATE));
+            @SuppressLint("Range") String courseStartDate = cursor.getString(cursor.getColumnIndex(COURSE_COLUMN_COURSE_START_DATE));
+            @SuppressLint("Range") String duration = cursor.getString(cursor.getColumnIndex(COURSE_COLUMN_DURATION));
+            @SuppressLint("Range") String publishDate = cursor.getString(cursor.getColumnIndex(COURSE_COLUMN_PUBLISH_DATE));
+            @SuppressLint("Range") double fee = cursor.getDouble(cursor.getColumnIndex(COURSE_COLUMN_FEE));
+            @SuppressLint("Range") String instructor = cursor.getString(cursor.getColumnIndex(COURSE_COLUMN_INSTRUCTOR));
+            course = new CourseModel(courseName, description, courseBranch, availableSeats, registrationClosingDate, courseStartDate, duration, publishDate, fee, instructor);
+        } else {
+            // Log if no course details found
+            Log.d(TAG, "No course details found for course ID: " + courseId);
+        }
+
+        cursor.close();
+        db.close();
+
+        return course;
+    }
 
 }

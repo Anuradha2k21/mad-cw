@@ -23,10 +23,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mad_cw.DatabaseHelper;
 import com.example.mad_cw.R;
 import com.example.mad_cw.admin.AdminModel;
+import com.example.mad_cw.map.MapActivity;
+import com.example.mad_cw.user.ProfileActivity;
 import com.example.mad_cw.user.UserLogin;
 import com.example.mad_cw.user.UserModel;
 import com.example.mad_cw.user.UserRegister;
 import com.example.mad_cw.user.UserUpdate;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,13 +42,35 @@ public class CourseRecyclerView extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageButton backButton, optionsButton;
     UserModel userModel;
-    AdminModel adminModel;
     boolean isLoggedIn;
+    AdminModel adminModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_course_recycler_view);
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView.setSelectedItemId(R.id.menu_home);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.menu_home) {
+                return true;
+            } else if (itemId == R.id.menu_map) {
+                startActivity(new Intent(getApplicationContext(), MapActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+                return true;
+            } else if (itemId == R.id.menu_profile) {
+                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+                return true;
+            }
+            return false;
+        });
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -138,7 +163,7 @@ public class CourseRecyclerView extends AppCompatActivity {
             Toast.makeText(this, "No Courses available", Toast.LENGTH_SHORT).show();
         } else {
             // Create an adapter and set it to the RecyclerView
-            CourseAdapter courseAdapter = new CourseAdapter(this, courseList);
+            CourseAdapter courseAdapter = new CourseAdapter(this, courseList, isLoggedIn);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(courseAdapter);
         }

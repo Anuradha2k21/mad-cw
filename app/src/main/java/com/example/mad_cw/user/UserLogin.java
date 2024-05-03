@@ -7,6 +7,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -17,7 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -37,13 +42,19 @@ public class UserLogin extends AppCompatActivity {
     private CheckBox rememberMe;
     private SharedPreferences sharedPreferences;
     private TextView tvForgotPassword;
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user_login);
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         btnViewPassword = findViewById(R.id.btn_view_password);
@@ -52,7 +63,6 @@ public class UserLogin extends AppCompatActivity {
         btnLogin = findViewById(R.id.btn_login);
         btnRegister = findViewById(R.id.btn_register_redirect);
         btnGuest = findViewById(R.id.btn_guest);
-        adminClick = findViewById(R.id.admin_click);
         rememberMe = findViewById(R.id.checkBox);
         tvForgotPassword = findViewById(R.id.tv_forgot_pword);
         sharedPreferences = getSharedPreferences("UserLogin", MODE_PRIVATE);
@@ -88,13 +98,6 @@ public class UserLogin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 validate();
-            }
-        });
-        adminClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(UserLogin.this, AdminLogin.class);
-                startActivity(intent);
             }
         });
         tvForgotPassword.setOnClickListener(new View.OnClickListener() {
@@ -197,7 +200,7 @@ public class UserLogin extends AppCompatActivity {
 
         if(userModel != null) {
             //  only runs if remember me is checked
-            if (rememberMe.isChecked()) {
+           if (rememberMe.isChecked()) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("Email", etEmail.getText().toString());
                 editor.putString("Password", etPassword.getText().toString());
@@ -206,6 +209,7 @@ public class UserLogin extends AppCompatActivity {
             //  runs anyway
             Intent intent = new Intent(UserLogin.this, CourseRecyclerView.class);
             intent.putExtra("user", userModel);
+            intent.putExtra("isLoggedIn", true); // Pass the login status
             startActivity(intent);
         }
         else {
@@ -230,4 +234,5 @@ public class UserLogin extends AppCompatActivity {
             Toast.makeText(UserLogin.this, "Please login again", Toast.LENGTH_SHORT).show();
         }
     }
+
 }

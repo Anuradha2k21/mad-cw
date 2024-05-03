@@ -6,19 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".user.UserLogin"
     android:background="@color/off_white"
+    android:id="@+id/main"
     >
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.477"
+        tools:ignore="MissingConstraints"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        tools:layout_editor_absoluteX="0dp" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView4"
         android:layout_width="match_parent"
-        android:layout_height="894dp"
+        android:layout_height="wrap_content"
         android:fillViewport="true"
-        android:isScrollContainer="true">
+        android:isScrollContainer="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="908dp"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:orientation="vertical"
             app:layout_anchor="@+id/nestedScrollView4"
@@ -36,10 +50,12 @@
                 android:hint="@string/email_text"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/black"
+                android:textColorHint="#757575"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.49"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView2"
+                tools:ignore="VisualLintTextFieldSize" />
 
             <CheckBox
                 android:id="@+id/checkBox"
@@ -74,7 +90,8 @@
                 app:layout_constraintHorizontal_bias="0.496"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView2"
-                app:srcCompat="@drawable/login" />
+                app:srcCompat="@drawable/login"
+                tools:ignore="ImageContrastCheck" />
 
             <EditText
                 android:id="@+id/txt_pword"
@@ -90,7 +107,8 @@
                 app:layout_constraintEnd_toEndOf="@+id/txt_email"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_email" />
+                app:layout_constraintTop_toBottomOf="@+id/txt_email"
+                tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
             <ImageButton
                 android:id="@+id/btn_view_password"
@@ -104,7 +122,8 @@
                 app:layout_constraintHorizontal_bias="0.93"
                 app:layout_constraintStart_toStartOf="@+id/txt_pword"
                 app:layout_constraintTop_toTopOf="@+id/txt_pword"
-                app:layout_constraintVertical_bias="0.545" />
+                app:layout_constraintVertical_bias="0.545"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/tv_forgot_pword"
@@ -113,8 +132,9 @@
                 android:layout_marginTop="20dp"
                 android:clickable="true"
                 android:focusable="true"
+                android:minHeight="48dp"
                 android:text="@string/forgot_password"
-                android:textColor="@color/forgot_password_text_color"
+                android:textColor="#546E7A"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.831"
                 app:layout_constraintStart_toEndOf="@+id/checkBox"
@@ -134,7 +154,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+                app:layout_constraintTop_toBottomOf="@+id/checkBox"
+                tools:ignore="VisualLintButtonSize" />
 
             <Button
                 android:id="@+id/btn_guest"
@@ -154,41 +175,30 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="44dp"
+                android:layout_marginStart="28dp"
                 android:text="@string/don_t_have_an_account"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btn_guest"
-                app:layout_constraintVertical_bias="0.298" />
+                app:layout_constraintVertical_bias="0.600" />
 
             <Button
                 android:id="@+id/btn_register_redirect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="20dp"
                 android:backgroundTint="@android:color/transparent"
                 android:text="@string/register"
                 android:textColor="@color/forgot_password_text_color"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/textView3"
                 app:layout_constraintTop_toBottomOf="@+id/btn_guest"
-                app:layout_constraintVertical_bias="0.132" />
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                app:layout_constraintBottom_toTopOf="@+id/textView2"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.477"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="0dp" />
+                app:layout_constraintVertical_bias="0.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

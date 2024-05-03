@@ -33,7 +33,7 @@
         <item>Kottawa</item>
         <item>Kandy</item>
     </string-array>
-    <string name="MAPS_API_KEY"></string>
+    <string name="MAPS_API_KEY">AIzaSyCvdFult7puPf7luYeCTF8Mlmlp3g7bl2o</string>
     <string name="national_institute_of_computing">National Institute of Computing</string>
     <string name="direction">direction</string>
     <string name="ok">OK</string>

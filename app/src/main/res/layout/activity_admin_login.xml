@@ -16,27 +16,27 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/linearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="184dp"
+                android:layout_width="373dp"
+                android:layout_height="848dp"
                 android:layout_marginHorizontal="20dp"
                 android:orientation="vertical"
                 tools:layout_editor_absoluteX="20dp"
                 tools:layout_editor_absoluteY="331dp">
 
                 <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="128dp"
-                android:text="@string/welcome_back"
-                android:textAlignment="center"
-                android:textColor="#000000"
-                android:textSize="40sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="128dp"
+                    android:text="@string/welcome_back"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="40sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/textView3"
@@ -95,7 +95,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/txt_email"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_email"/>
+                    app:layout_constraintTop_toBottomOf="@+id/txt_email" />
 
                 <ImageButton
                     android:id="@+id/btn_view_password"
@@ -109,7 +109,7 @@
                     android:src="@drawable/ic_hide_password"
                     app:layout_constraintBottom_toBottomOf="@+id/txt_pword"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/txt_pword"/>
+                    app:layout_constraintTop_toTopOf="@+id/txt_pword" />
 
                 <Button
                     android:id="@+id/btn_login"
@@ -125,7 +125,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txt_pword"
                     app:layout_constraintVertical_bias="0.235"
-                    tools:layout_editor_absoluteX="0dp"  />
+                    tools:layout_editor_absoluteX="0dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
