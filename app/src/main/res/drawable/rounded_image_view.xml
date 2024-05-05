@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background Circle -->
+    <item>
+        <shape android:shape="oval"/>
+    </item>
+    <!-- Profile Image -->
+    <item android:id="@+id/profile_image_layer">
+        <bitmap
+            android:id="@+id/profile_image_bitmap"
+            android:src="@drawable/default_profile_img"
+            android:gravity="center"
+            android:scaleType="fitCenter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </item>
+</layer-list>
